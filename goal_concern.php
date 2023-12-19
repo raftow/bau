@@ -294,6 +294,13 @@ class GoalConcern extends AFWObject{
             $list_of_items[5] = "تعديل سريع";  //     code : QEDIT 
            return  $list_of_items;
         }
+
+        public function shouldBeCalculatedField($attribute){
+            if($attribute=="goal_atable_mfk") return true;
+            if($attribute=="goal_system_id") return true;
+            if($attribute=="goal_domain_id") return true;
+            return false;
+        }
              
 }
 ?>
