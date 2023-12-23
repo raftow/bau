@@ -301,6 +301,15 @@ class GoalConcern extends AFWObject{
             if($attribute=="goal_domain_id") return true;
             return false;
         }
+
+        protected function myShortNameToAttributeName($attribute){
+            if($attribute=="goal") return "goal_id";
+            if($attribute=="application") return "application_id";
+            if($attribute=="jobrole") return "jobrole_id";
+            if($attribute=="atables") return "atable_mfk";
+            if($attribute=="operations") return "operation_men";
+            return $attribute;
+        }
              
 }
 ?>
