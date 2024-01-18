@@ -483,7 +483,7 @@ class RAMObject extends AFWObject{
                 if($nb_instances>700)
                 {
                     return array("","");
-                    //$this->throwError(" too much reverseAnalysis calls : $nb_instances ($gen_module,$gen_table,$gen_class) level=$level heighest_level=$heighest_level");
+                    //throw new AfwRuntimeException(" too much reverseAnalysis calls : $nb_instances ($gen_module,$gen_table,$gen_class) level=$level heighest_level=$heighest_level");
                 }
                 
 
@@ -543,7 +543,7 @@ class RAMObject extends AFWObject{
                                              
                                              if($level>$max_level-1)
                                              { 
-                                                     $this->throwError("big reverse analysis level : $level ($gen_module,$gen_table,$gen_class) going to categ ==> $child_item_category_id");
+                                                     throw new AfwRuntimeException("big reverse analysis level : $level ($gen_module,$gen_table,$gen_class) going to categ ==> $child_item_category_id");
                                                      return array("","");
                                              }
                                              if($level<$max_level-1)

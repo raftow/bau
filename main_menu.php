@@ -8,11 +8,11 @@
       if($uri_items[0]) $module = $uri_items[0];
         else $module = $uri_items[1];
 
-       //$objme->throwError("chnia 7keya");
+       //throw new AfwRuntimeException("chnia 7keya");
        /*
        if($objme)
        {
-          if(!$objme->isAdmin()) $objme->throwError("I am not admin");
+          if(!$objme->isAdmin()) throw new AfwRuntimeException("I am not admin");
        }
        else die("I am not here");*/
 

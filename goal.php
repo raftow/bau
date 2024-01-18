@@ -145,9 +145,9 @@ class Goal extends AFWObject{
         public static function loadByMainIndex($system_id, $module_id, $goal_code,$create_obj_if_not_found=false)
         {
            $obj = new Goal();
-           if(!$system_id) $obj->throwError("loadByMainIndex : system_id is mandatory field");
-           if(!$module_id) $obj->throwError("loadByMainIndex : module_id is mandatory field");
-           if(!$goal_code) $obj->throwError("loadByMainIndex : goal_code is mandatory field");
+           if(!$system_id) throw new AfwRuntimeException("loadByMainIndex : system_id is mandatory field");
+           if(!$module_id) throw new AfwRuntimeException("loadByMainIndex : module_id is mandatory field");
+           if(!$goal_code) throw new AfwRuntimeException("loadByMainIndex : goal_code is mandatory field");
  
  
            $obj->select("system_id",$system_id);
@@ -366,7 +366,7 @@ class Goal extends AFWObject{
                $jobGoalId = $this->getId();
                $jobGoalCode = $this->valCode();
                
-               if(!$jobGoalId) $this->throwError("Can't create associated Arole for empty goal");
+               if(!$jobGoalId) throw new AfwRuntimeException("Can't create associated Arole for empty goal");
                
                $parentGoal = $this->het("parent_goal_id");
                if($parentGoal)
@@ -421,14 +421,14 @@ class Goal extends AFWObject{
                   $goalTypeObj = $this->getType();
                   if(!$goalTypeObj)
                   {
-                      $this->throwError("getRAMObjectData error goalType not defined for this goal");
+                      throw new AfwRuntimeException("getRAMObjectData error goalType not defined for this goal");
                   }
                   $lookup_code = $goalTypeObj->getVal("lookup_code");
                   
                   $typeObj = RAMObjectType::loadByMainIndex($lookup_code);
                   if(!$typeObj)
                   {
-                      $this->throwError("getRAMObjectData error goalType lookup code [$lookup_code] not found as RAMObjectType");
+                      throw new AfwRuntimeException("getRAMObjectData error goalType lookup code [$lookup_code] not found as RAMObjectType");
                   }
                   $type_id = $typeObj->getId();
                   

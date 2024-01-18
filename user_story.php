@@ -443,7 +443,7 @@ class UserStory extends AFWObject{
                                 if(!$goal_decision) $goal_decision = "no goal found for the jobrole [$jobrole] and business function [$bfunction]";
                                 $err = $goal_decision;
                                 $info = "";
-                                //$this->throwError("the '$this' user story can't find goal for this (jobrole=$jobrole, BF=$bfunction, module=$module) $goal_decision !");
+                                //throw new AfwRuntimeException("the '$this' user story can't find goal for this (jobrole=$jobrole, BF=$bfunction, module=$module) $goal_decision !");
                         }
                         $this->set("comments",$goal_decision);
                         
@@ -489,7 +489,7 @@ class UserStory extends AFWObject{
               global $lang, $MODE_BATCH_LOURD;
                 $old_MODE_BATCH_LOURD = $MODE_BATCH_LOURD;
                 $MODE_BATCH_LOURD = true;
-                // $this->throwError("Fields Updated : ".var_export($fields_updated,true));
+                // throw new AfwRuntimeException("Fields Updated : ".var_export($fields_updated,true));
                 if($this->isActive())
                 {
                         
@@ -624,13 +624,13 @@ class UserStory extends AFWObject{
         
         protected function beforeSetAttribute($attribute, $newvalue)
         {
-              // if(($attribute=="user_story_goal_id") and ($newvalue>0) and ($this->getVal("bfunction_id")==103131) and ($newvalue!=46)) $this->throwError("user_story_goal_id setted to value $newvalue");
+              // if(($attribute=="user_story_goal_id") and ($newvalue>0) and ($this->getVal("bfunction_id")==103131) and ($newvalue!=46)) throw new AfwRuntimeException("user_story_goal_id setted to value $newvalue");
               
               $oldvalue = $this->getVal($attribute);
               
               if(($attribute=="user_story_goal_id") and ($newvalue>0))
               {
-                   //$this->throwError("test rafik");
+                   //throw new AfwRuntimeException("test rafik");
               }
               
               if(($attribute=="user_story_goal_id") and ($newvalue==0))

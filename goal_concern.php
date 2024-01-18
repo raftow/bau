@@ -250,13 +250,13 @@ class GoalConcern extends AFWObject{
                   
                   if(!$goal)
                   {
-                      $this->throwError("getRAMObjectData error goal not defined for this goal concern");
+                      throw new AfwRuntimeException("getRAMObjectData error goal not defined for this goal concern");
                   }
                   
                   $goalTypeObj = $goal->getType();
                   if(!$goalTypeObj)
                   {
-                      $goal->throwError("getRAMObjectData error goalType not defined for this goal $goal");
+                      throw new AfwRuntimeException("getRAMObjectData error goalType not defined for this goal $goal");
                   }
                   
                   $lookup_code = $goalTypeObj->getVal("lookup_code");
@@ -268,7 +268,7 @@ class GoalConcern extends AFWObject{
                   $typeObj = RAMObjectType::loadByMainIndex($lookup_code);
                   if(!$typeObj)
                   {
-                      $this->throwError("getRAMObjectData error goalType lookup code [$lookup_code] not found as RAMObjectType");
+                      throw new AfwRuntimeException("getRAMObjectData error goalType lookup code [$lookup_code] not found as RAMObjectType");
                   }
                   $type_id = $typeObj->getId();
                   
@@ -300,6 +300,15 @@ class GoalConcern extends AFWObject{
             if($attribute=="goal_system_id") return true;
             if($attribute=="goal_domain_id") return true;
             return false;
+        }
+
+        protected function myShortNameToAttributeName($attribute){
+            if($attribute=="goal") return "goal_id";
+            if($attribute=="application") return "application_id";
+            if($attribute=="jobrole") return "jobrole_id";
+            if($attribute=="atables") return "atable_mfk";
+            if($attribute=="operations") return "operation_men";
+            return $attribute;
         }
              
 }
