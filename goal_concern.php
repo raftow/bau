@@ -302,7 +302,7 @@ class GoalConcern extends AFWObject{
             return false;
         }
 
-        protected function myShortNameToAttributeName($attribute){
+        public function myShortNameToAttributeName($attribute){
             if($attribute=="goal") return "goal_id";
             if($attribute=="application") return "application_id";
             if($attribute=="jobrole") return "jobrole_id";
