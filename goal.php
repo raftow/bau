@@ -730,7 +730,7 @@ class Goal extends AFWObject{
         
         
         public function attributeIsApplicable($attribute)
-         {
+        {
               if($attribute=="atable_mfk") return (!$this->isTodoGoal());
               if($attribute=="goalConcernList") return (!$this->isTodoGoal());
               
@@ -738,7 +738,17 @@ class Goal extends AFWObject{
               // if($attribute=="jobrole_id") return ($this->isResponsibilityGoal());
               
               return true;
-         }
+        }
+
+         public function myShortNameToAttributeName($attribute){
+                if($attribute=="code") return "goal_code";
+                if($attribute=="type") return "goal_type_id";
+                if($attribute=="system") return "system_id";
+                if($attribute=="module") return "module_id";
+                if($attribute=="resp") return "jobrole_id";
+                if($attribute=="tables") return "atable_mfk";
+                return $attribute;
+        }
         
              
 }
