@@ -23,109 +23,13 @@ class Goal extends AFWObject{
         public static $GOAL_TYPE_JOB_RESPONSIBILITY_GOAL = 3;
         
 
-	public static $DATABASE		= ""; public static $MODULE		    = "bau"; public static $TABLE			= ""; public static $DB_STRUCTURE = null; /* array(
-                id => array("SHOW" => true, "RETRIEVE" => true, "EDIT" => false, "TYPE" => "PK"),
-
-                domain_id => array(FGROUP=>prop, "SHOW" => true, "RETRIEVE" => true, "EDIT" => true, "TYPE" => "FK", "ANSWER" => "domain", "ANSMODULE" => "pag", 
-                                  RELATION => OneToMany, "WHERE"=>"", "QEDIT" => true,  MANDATORY=>true, "SIZE" => 40, 
-                                  DEPENDENT_OFME=>array("module_id", "jobrole_id", ),
-                                  ), 
-
-                goal_code => array(FGROUP=>prop, "SEARCH" => true, "SHOW" => true, "RETRIEVE" => true, "EDIT" => true, "QEDIT" => true, "SIZE" => 40, "SEARCH-ADMIN" => true, 
-                                     "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "MANDATORY" => true, "UTF8" => true, "TYPE" => "TEXT",
-                                     SHORTNAME=>code, CHAR_TEMPLATE=>"LOOKUP_CODE"),
-		
-		goal_type_id => array(FGROUP=>prop, "IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE" => true, "EDIT" => true, "QEDIT" => true, "SIZE" => 40,
-                                         "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => false, 
-                                         TYPE => FK, ANSWER => goal_type, ANSMODULE => bau, MANDATORY=>true, SHORTNAME=>"type",
-                                         DEPENDENT_OFME=>array("parent_goal_id", ),  
-                                         ),
-                                         
-                system_id => array(FGROUP=>prop, "IMPORTANT" => "IN", "SEARCH" => false, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "SIZE" => 40, "UTF8" => false, 
-                                      "TYPE" => "FK", "ANSWER" => module, "ANSMODULE" => ums, MANDATORY=>true, 
-                                      WHERE => "id_module_type in (4,7) ",  //and ('§CONTEXT_ID§'='' or id = '§CONTEXT_ID§')
-                                      QEDIT=>false, QEDIT_FGROUP => false, "SHORTNAME"=>"system", "SEARCH-BY-ONE"=>true,
-                                      DEPENDENT_OFME=>array("module_id", ),
-                                      "DEFAULT" => 1),
-
-		module_id => array(FGROUP=>prop, "IMPORTANT" => "IN", "SEARCH" => false, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "SIZE" => 40, "UTF8" => false, 
-                                      "TYPE" => "FK", "ANSWER" => module, "ANSMODULE" => ums, RELATION => OneToMany, MANDATORY=>true, 
-                                      WHERE => "id_pm = §domain_id§ and id_module_type = 5 and ((§system_id§='' and id_system = '§CONTEXT_ID§') or (id_system = §system_id§))",
-                                      DEPENDENCIES=>array("domain_id","system_id"), 
-                                      DEPENDENT_OFME=>array("parent_goal_id", ),  
-                                      QEDIT=>false, QEDIT_FGROUP => false, "SHORTNAME"=>"module", "SEARCH-BY-ONE"=>true,
-                                      "DEFAULT" => 0),
-
-                parent_goal_id => array(FGROUP=>prop, "IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE" => false, 
-                                         EDIT => true, QEDIT => false, SIZE => 40, "UTF8" => false, 
-                                         TYPE => FK, ANSWER => goal, ANSMODULE => bau, 
-                                         WHERE =>"module_id = §module_id§ and id != '§id§' and goal_type_id < §goal_type_id§",
-                                         DEPENDENCIES=>array("module_id","goal_type_id"),  
-                                         "DEFAULT" => 0),
-                
-
-                jobrole_id => array(FGROUP=>prop, "IMPORTANT" => "IN", "SEARCH" => false, "SHOW" => true, "RETRIEVE" => true, 
-                                       "EDIT" => true, "QEDIT" => false, "SIZE" => 40, "UTF8" => false, 
-                                       "TYPE" => "FK", "ANSWER" => jobrole, "ANSMODULE" => pag,  MANDATORY=>true, SHORTNAME=>"resp",
-                                       WHERE => "id_domain in (1,§domain_id§)",
-                                       DEPENDENCIES=>array("domain_id",), 
-                                       RELATION => OneToMany, 
-                                       "DEFAULT" => 0),
-
-		atable_mfk => array(FGROUP=>prop, SHORTNAME => tables, "SEARCH" => false, "QSEARCH" => false, "SHOW" => true, 
-                                         RETRIEVE => true, EDIT => true, QEDIT => false, SIZE => 40, MANDATORY => true, UTF8 => false, 
-                                         AUTOCOMPLETE=>true, WHERE=>"id_module = §module_id§ and is_entity='Y' and avail = 'Y'",
-                                         DEPENDENCIES=>array("module_id",),
-                                         TYPE => MFK, ANSWER => atable, "ANSMODULE" => pag),
-
-                avail => array(FGROUP=>prop, "SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => true, "DEFAULT" => "Y", QEDIT=>true, "TYPE" => "YN"),
-                
-		goal_name_ar => array(FGROUP=>text, "IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-AR" => false, "EDIT" => true, "QEDIT" => true , "SIZE" => 64 , "MIN-SIZE" => 6 , "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => true, "TYPE" => "TEXT", CHAR_TEMPLATE=>"TEXT_AR"),
-		goal_name_en => array(FGROUP=>text, "IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-EN" => false, "EDIT" => true, "QEDIT" => false, "SIZE" => 64 , "MIN-SIZE" => 6 , "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => false, "TYPE" => "TEXT", CHAR_TEMPLATE=>"TEXT_EN"),
-		goal_desc_ar => array(FGROUP=>text, "IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-AR" => false, "EDIT" => true, "QEDIT" => true, "SIZE" => 196, "MIN-SIZE" => 16, "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => true, "TYPE" => "TEXT", CHAR_TEMPLATE=>"ALL"),
-		goal_desc_en => array(FGROUP=>text, "IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-EN" => false, "EDIT" => true, "QEDIT" => false, "SIZE" => 196, "MIN-SIZE" => 16, "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => false, "TYPE" => "TEXT", CHAR_TEMPLATE=>"ALL"),
-                
-                goal_html_ar => array(FGROUP=>text, "SHOW" => true, "RETRIEVE-AR" => true,  "SIZE" => "AREA", "UTF8" => false, 
-                                    "TYPE" => "TEXT", CATEGORY => "FORMULA", "PHP_FORMULA"=>"paragraph.goal_name_ar.goal_desc_ar", ),
-                goal_html_en => array(FGROUP=>text, "SHOW" => true, "RETRIEVE-EN" => true,  "SIZE" => "AREA", "UTF8" => false, 
-                                    "TYPE" => "TEXT", CATEGORY => "FORMULA", "PHP_FORMULA"=>"paragraph.goal_name_en.goal_desc_en", ),
-
-
-                goalConcernList => array(STEP=>2,TYPE => FK, ANSWER => goal_concern, ANSMODULE => bau, CATEGORY => ITEMS, ITEM => 'goal_id', WHERE=>'', SHOW => true, FORMAT=>retrieve, EDIT => false, ICONS=>true, 'DELETE-ICON'=>true, BUTTONS=>true, "NO-LABEL"=>false, MANDATORY => true),
-                
-
-                goalList => array(STEP=>2,TYPE => FK, ANSWER => goal, ANSMODULE => bau, CATEGORY => ITEMS, ITEM => 'parent_goal_id', WHERE=>'', SHOW => true, FORMAT=>retrieve, EDIT => false, ICONS=>true, 'DELETE-ICON'=>false, BUTTONS=>true, "NO-LABEL"=>false),
-                
-                {*
-                orgunitList 	   => array(TYPE => MFK, ANSWER => orgunit, ANSMODULE => bau, CATEGORY => "FORMULA", "SHOW" => true, "RETRIEVE"=>false, "EDIT" => true, "QEDIT" => false, "READONLY"=>true, 
-                                             "PHP_FORMULA"=>"list_extract.goalConcernList.orgunit_id.", ),
-                                             
-                jobsddList 	   => array(TYPE => MFK, ANSWER => jobsdd, ANSMODULE => bau, CATEGORY => "FORMULA", "SHOW" => true, "RETRIEVE"=>false, "EDIT" => true, "QEDIT" => false, "READONLY"=>true, 
-                                             "PHP_FORMULA"=>"list_extract.goalConcernList.jobsdd_id.", ),
-                *}                            
-                
-                jobroleList 	   => array(STEP=>2,TYPE => MFK, ANSWER => jobrole, ANSMODULE => pag, CATEGORY => "FORMULA", "SHOW" => true, "RETRIEVE"=>false, "EDIT" => false, "QEDIT" => false, "READONLY"=>true, 
-                                             "PHP_FORMULA"=>"list_extract.goalConcernList.jobrole_id.", ),                                                          
-
-                userStoryList => array(STEP=>3,TYPE => FK, ANSWER => user_story, ANSMODULE => bau, CATEGORY => ITEMS, ITEM => 'user_story_goal_id', WHERE=>'', SHOW => true, FORMAT=>retrieve, EDIT => false, ICONS=>true, 'DELETE-ICON'=>false, BUTTONS=>true, "NO-LABEL"=>false),
-                
-                
-
-                id_aut => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "FK", "ANSWER" => "auser", "ANSMODULE" => "ums"),
-                date_aut => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "DATETIME"),
-                id_mod => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "FK", "ANSWER" => "auser", "ANSMODULE" => "ums"),
-                date_mod => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "DATETIME"),
-                id_valid => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "FK", "ANSWER" => "auser", "ANSMODULE" => "ums"),
-                date_valid => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "DATETIME"),
-                version => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "INT"),
-                update_groups_mfk => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "ugroup", "ANSMODULE" => "ums", "TYPE" => "MFK"),
-                delete_groups_mfk => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "ugroup", "ANSMODULE" => "ums", "TYPE" => "MFK"),
-                display_groups_mfk => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "ugroup", "ANSMODULE" => "ums", "TYPE" => "MFK"),
-                sci_id => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "FK", "ANSWER" => "scenario_item", "ANSMODULE" => "pag"),
-                tech_notes 	    => array(TYPE => TEXT, CATEGORY => FORMULA, "SHOW-ADMIN" => true, 'STEP' =>"all", TOKEN_SEP=>"§", READONLY=>true, "NO-ERROR-CHECK"=>true),
-	);
-	
-	*/ public function __construct(){
+	public static $DATABASE		= ""; 
+        public static $MODULE		    = "bau"; 
+        public static $TABLE			= ""; 
+        public static $DB_STRUCTURE = null; 
+        
+        
+        public function __construct(){
 		parent::__construct("goal","id","bau");
                 $this->QEDIT_MODE_NEW_OBJECTS_DEFAULT_NUMBER = 15;
                 $this->DISPLAY_FIELD = "goal_name_ar";
@@ -749,6 +653,43 @@ class Goal extends AFWObject{
                 if($attribute=="tables") return "atable_mfk";
                 return $attribute;
         }
+
+        public function findMainGoalConcern($jobrole_id=null)
+        {
+                $goal_id = $this->id;
+                if($jobrole_id) $objGC = GoalConcern::loadByMainIndex($goal_id, $jobrole_id);
+                else $objGC = GoalConcern::loadUniqueForGoal($goal_id);
+                return $objGC;
+        }
+
+
+        public function fullManageTable($atable_id, $jobrole_id=null, $action="+t")
+        {
+                if($action=="+t")
+                {
+                        $ids_to_add_arr = [];
+                        $ids_to_remove_arr = [];
+                        $ids_to_add_arr[] = $atable_id;
+                }
+                else // -t
+                {
+                        $ids_to_add_arr = [];
+                        $ids_to_remove_arr = [];
+                        $ids_to_remove_arr[] = $atable_id;
+                }
+
+                $objGC = $this->findMainGoalConcern($jobrole_id);
+                if(!$objGC) throw new AfwRuntimeException("the goal concern is not found or not unique (so you need to specify the jobrole_id)");
+                
+                $this->addRemoveInMfk("atable_mfk", $ids_to_add_arr, $ids_to_remove_arr,);
+                $objGC->addRemoveInMfk("atable_mfk", $ids_to_add_arr, $ids_to_remove_arr,);
+                $this->commit();
+                $objGC->commit();
+
+                return $this->resetUserBFs();
+        }
+
+        
         
              
 }

@@ -60,6 +60,52 @@ class GoalConcern extends AFWObject{
            else return null;
         }
 
+        public static function loadByMainIndex($goal_id, $jobrole_id, $create_obj_if_not_found=false)
+        {
+           $obj = new GoalConcern();
+           if(!$goal_id) throw new AfwRuntimeException("loadByMainIndex : goal_id is mandatory field");
+           if(!$jobrole_id) throw new AfwRuntimeException("loadByMainIndex : jobrole_id is mandatory field");
+ 
+           $obj->select("goal_id",$goal_id);
+           $obj->select("jobrole_id",$jobrole_id);
+ 
+           if($obj->load())
+           {
+                if($create_obj_if_not_found) $obj->activate();
+                return $obj;
+           }
+           elseif($create_obj_if_not_found)
+           {
+                $obj->set("goal_id",$goal_id);
+                $obj->set("jobrole_id",$jobrole_id);
+ 
+                $obj->insert();
+                $obj->is_new = true;
+                return $obj;
+           }
+           else return null;
+ 
+        }
+
+        public static function loadUniqueForGoal($goal_id)
+        {
+            $obj = new GoalConcern();
+            if(!$goal_id) throw new AfwRuntimeException("loadFirstForGoal : goal_id is mandatory field");
+            
+            
+    
+            $obj->select("goal_id",$goal_id);
+            if($obj->count()!=1) return null;
+            
+            $obj->select("goal_id",$goal_id);
+            if($obj->load())
+            {
+                return $obj;
+            }
+            else return null;
+ 
+        }
+
 
         public static function getJobRoleGoalListUsingTable($jobrole_id,$atable_id)
         {
@@ -123,33 +169,7 @@ class GoalConcern extends AFWObject{
                 
         
         
-        public static function loadByMainIndex($goal_id, $jobrole_id,$create_obj_if_not_found=false)
-        {
-           $obj = new GoalConcern();
-           if(!$goal_id) $obj->_error("loadByMainIndex : goal_id is mandatory field");
-           if(!$jobrole_id) $obj->_error("loadByMainIndex : jobrole_id is mandatory field");
- 
- 
-           $obj->select("goal_id",$goal_id);
-           $obj->select("jobrole_id",$jobrole_id);
- 
-           if($obj->load())
-           {
-                if($create_obj_if_not_found) $obj->activate();
-                return $obj;
-           }
-           elseif($create_obj_if_not_found)
-           {
-                $obj->set("goal_id",$goal_id);
-                $obj->set("jobrole_id",$jobrole_id);
- 
-                $obj->insert();
-                $obj->is_new = true;
-                return $obj;
-           }
-           else return null;
- 
-        }
+        
 
 
         public function getDisplay($lang="ar")

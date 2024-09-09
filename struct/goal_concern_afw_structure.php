@@ -9,37 +9,38 @@
 				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
 				),
 
-		'goal_atable_mfk' => array(
-				'CATEGORY' => 'SHORTCUT',  'SHORTCUT' => 'goal.atable_mfk',  
-				'TYPE' => 'MFK',  'ANSWER' => 'atable',  'ANSMODULE' => 'pag',  'NO-COTE' => true,  'SEARCH-BY-ONE' => '',  'DISPLAY' => '',  'STEP' => 1,  
-				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
-				),
+									'goal_atable_mfk' => array(
+											'CATEGORY' => 'SHORTCUT',  'SHORTCUT' => 'goal.atable_mfk',  
+											'TYPE' => 'MFK',  'ANSWER' => 'atable',  'ANSMODULE' => 'pag',  'NO-COTE' => true,  'SEARCH-BY-ONE' => '',  'DISPLAY' => '',  'STEP' => 1,  
+											'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
+											),
 
-		'goal_system_id' => array(
-				'CATEGORY' => 'SHORTCUT',  'SHORTCUT' => 'goal.system_id',  
-				'TYPE' => 'MFK',  'ANSWER' => 'module',  'ANSMODULE' => 'ums',  'NO-COTE' => true,  'SEARCH-BY-ONE' => '',  'DISPLAY' => '',  'STEP' => 1,  
-				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
-				),
+									'goal_system_id' => array(
+											'CATEGORY' => 'SHORTCUT',  'SHORTCUT' => 'goal.system_id',  
+											'TYPE' => 'MFK',  'ANSWER' => 'module',  'ANSMODULE' => 'ums',  'NO-COTE' => true,  'SEARCH-BY-ONE' => '',  'DISPLAY' => '',  'STEP' => 1,  
+											'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
+											),
 
-		'goal_domain_id' => array(
-				'CATEGORY' => 'SHORTCUT',  'SHORTCUT' => 'goal.domain_id',  
-				'TYPE' => 'MFK',  'ANSWER' => 'domain',  'ANSMODULE' => 'pag',  'NO-COTE' => true,  'SEARCH-BY-ONE' => '',  'DISPLAY' => '',  'STEP' => 1,  
-				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
-				),
+									'goal_domain_id' => array(
+											'CATEGORY' => 'SHORTCUT',  'SHORTCUT' => 'goal.domain_id',  
+											'TYPE' => 'MFK',  'ANSWER' => 'domain',  'ANSMODULE' => 'pag',  'NO-COTE' => true,  'SEARCH-BY-ONE' => '',  'DISPLAY' => '',  'STEP' => 1,  
+											'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
+											),
 
-			'goal_id' => array('SHORTNAME' => 'goal',  'SEARCH' => true,  'QSEARCH' => true,  'SHOW' => true,  'RETRIEVE' => true,  'EDIT' => true,  'QEDIT' => true,  'SIZE' => 40,  'MANDATORY' => true,  'UTF8' => false,  
+			'goal_id' => array('SHORTNAME' => 'goal',  'SEARCH' => true,  'QSEARCH' => true,  
+				'SHOW' => true,  'RETRIEVE' => true,  'EDIT' => true,  'QEDIT' => true,  
+				'SIZE' => 40,  'MANDATORY' => true,  'UTF8' => false,  
 				'TYPE' => 'FK',  'ANSWER' => 'goal',  'ANSMODULE' => 'bau',  
 				'RELATION' => 'OneToMany',  'DEFAUT' => 0,  'SEARCH-BY-ONE' => true,  'DISPLAY' => true,  'STEP' => 1,  
 				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '',  'ERROR-CHECK' => true, 
 				),
 
-			'application_id' => array('SHORTNAME' => 'application',  'SEARCH' => false,  'QSEARCH' => false,  'SHOW' => true,  'RETRIEVE' => true,  'EDIT' => true,  'QEDIT' => true,  'SIZE' => 40,  'MANDATORY' => true,  'UTF8' => false,  
+			'application_id' => array('SHORTNAME' => 'application',  'SEARCH' => false,  'QSEARCH' => false,  
+				'SHOW' => true,  'RETRIEVE' => true,  'EDIT' => true,  'QEDIT' => true,  
+				'SIZE' => 40,  'MANDATORY' => true,  'UTF8' => false,  
 				'TYPE' => 'FK',  'ANSWER' => 'module',  'ANSMODULE' => 'ums',  
 				'WHERE' => "id_module_type=5 and id_system = §goal_system_id§ and id_pm = §goal_domain_id§ ", 
-				 
-				'DEPENDENT_OFME' => array (
-  0 => 'atable_mfk',
-),  'DEFAUT' => 0,  'SEARCH-BY-ONE' => false,  'DISPLAY' => true,  'STEP' => 1,  
+				'DEPENDENT_OFME' => array (0 => 'atable_mfk',),  'DEFAUT' => 0,  'SEARCH-BY-ONE' => false,  'DISPLAY' => true,  'STEP' => 1,  
 				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '',  'ERROR-CHECK' => true, 
 				),
 
