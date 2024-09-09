@@ -6,7 +6,10 @@ $file_dir_name = dirname(__FILE__);
 class Gfield extends AFWObject{
         public static $COMPTAGE_BEFORE_LOAD_MANY = true;
         
-	public static $DATABASE		= ""; public static $MODULE		    = "bau"; public static $TABLE			= ""; public static $DB_STRUCTURE = null; /* array(
+	public static $DATABASE		= ""; 
+        public static $MODULE		    = "bau"; 
+        public static $TABLE			= ""; 
+        public static $DB_STRUCTURE = null; /* array(
 		"id" => array("SHOW" => true, "RETRIEVE" => true, "EDIT" => true, "TYPE" => "PK"),
 		"parent_module_id" => array("SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "TYPE" => "FK", 
                       "ANSWER" => "module", ANSMODULE => ums, "IMPORTANT"=>"CM", "WHERE"=>"id_module_type in (5,4)"),

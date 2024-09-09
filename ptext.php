@@ -186,7 +186,7 @@ class Ptext extends AFWObject{
              }
              if(($p_cat==3) or ($p_cat==6) or ($p_cat==7))
              {
-                 $p_text_html = self::toHtml($p_text); 
+                 $p_text_html = AfwFormatHelper::toHtml($p_text); 
                  $html .= "<p class='page_paragraph'>$p_text_html</p><br>";
                  
                  
@@ -203,10 +203,11 @@ class Ptext extends AFWObject{
         
         protected function getOtherLinksArray($mode, $genereLog = false, $step="all")
         {
-           global $me, $objme;
-           
+           global $lang;
+             $objme = AfwSession::getUserConnected();
+             $me = $objme ? $objme->id : 0;
              $ptextType = $this->het("ptext_type_id");
-             
+             $displ = $this->getDisplay($lang);
              $otherLinksArray = array();   
              if($mode=="display")
              {
@@ -282,13 +283,13 @@ class Ptext extends AFWObject{
              return $otherLinksArray;          
         }
         
-        public function getDisplay() 
+        public function getDisplay($lang="ar") 
         {
                 return $this->valTitre_Short();   
 
 	}
         
-        public function getOrderByFields()
+        public function getOrderByFields($join = true)
 	{
 		return "stakeholder_id,module_id,pdocument_id,parent_ptext_id,pnum,id";
 	}

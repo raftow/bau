@@ -4,7 +4,7 @@
       
       require_once("$file_dir_name/../lib/afw/afw_displayer_factory.php");
 
-      $uri_items = explode("/",$_SERVER[REQUEST_URI]);
+      $uri_items = explode("/",$_SERVER['REQUEST_URI']);
       if($uri_items[0]) $module = $uri_items[0];
         else $module = $uri_items[1];
 
