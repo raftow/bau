@@ -32,101 +32,16 @@ ptext_cat :
 
 class Ptext extends AFWObject{
 
-        public static $COMPTAGE_BEFORE_LOAD_MANY = true;
+    public static $COMPTAGE_BEFORE_LOAD_MANY = true;
 
-	public static $DATABASE		= ""; public static $MODULE		    = "bau"; public static $TABLE			= ""; public static $DB_STRUCTURE = null; /* array(
-		"id" => array("SHOW" => true, "RETRIEVE" => true, "EDIT" => true, "TYPE" => "PK"),
-                "ptext_type_id" => array(SHOW => true, RETRIEVE => true, SEARCH => true, QSEARCH => true, "EDIT" => true, TYPE => FK, ANSWER => ptext_type, ANSMODULE => bau, "QEDIT" => false, "SIZE" => 40, "DEFAULT" => 0, READONLY=>true),
-		"ptext_cat_id" => array(SHOW => true, RETRIEVE => true, QSEARCH => true, "EDIT" => true, TYPE => FK, ANSWER => ptext_cat, ANSMODULE => bau, "QEDIT" => false, "SIZE" => 40, "DEFAULT" => 0, "WHERE"=>"(ptext_type_id=§ptext_type_id§ or §ptext_type_id§=0)"),
-	
-                "stakeholder_id" => array("SHOW" => true, SEARCH => true, QSEARCH => true, "EDIT" => true, TYPE => FK, 
-                                    ANSWER => orgunit, ANSMODULE => hrm, WHERE=>"", 
-                                    SIZE => 40, "QEDIT" => false, "DEFAULT" => 5, "IMPORTANT"=>"CM"),
-
-                orgunit_id => array("SHOW" => true, SEARCH => true, QSEARCH => true, "EDIT" => true, "QEDIT" => false, "SIZE" => 40, "UTF8" => false, 
-                                    "TYPE" => "FK", "ANSWER" => orgunit, "ANSMODULE" => hrm, "DEFAULT" => 0),
-
-		"module_id" => array(SHOW => true, RETRIEVE => false, EDIT => true, 
-                                    TYPE => FK, ANSWER => module, ANSMODULE => ums, 
-                                    SIZE => 40, "DEFAULT" => 0, "QEDIT" => false, 
-                                    WHERE=>"(id_main_sh=§orgunit_id§ or §orgunit_id§=0) and (§ptext_type_id§ != 5 or id_module_type in (5,7)) and id_module_status in (3,4,5,6)", 
-                                    "IMPORTANT"=>"CM", 'STEP' =>2),
-
-                "id_theme" => array("SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "SEARCH" => false, "QEDIT" => false, 
-                       TYPE => FK, ANSWER => theme, "SIZE" => 40, "DEFAULT" => 0),
-
-		"author_id" => array("SHOW" => true, "RETRIEVE" => false, "EDIT" => true, 
-                                 TYPE => FK, ANSWER => auser, ANSMODULE => ums,
-                                 WHERE => "id in (select auser_id from c0hrm.employee where id_sh_div = §stakeholder_id§)", // @todo : here normally we should have system of rules of relation between 
-                                                                                                            // ptext_types and orgunits who can do what (edit/delete/display) 
-                                 QEDIT => false, "SIZE" => 40, "DEFAULT" => 0, 'STEP' =>2),
-
-                "authors_mfk" => array("SHOW" => true, "SEARCH" => false, "RETRIEVE" => false, "EDIT" => false, "QEDIT" => false, "EDIT-ADMIN" => true, 
-                                        TYPE => MFK, ANSWER => auser, ANSMODULE => ums,
-                                        WHERE => "id != §author_id§ and id in (select auser_id from c0hrm.employee where id_sh_div = §stakeholder_id§)", // @todo : here normally we should have system of rules of relation between 
-                                                                                                                   // ptext_types and orgunits who can do what (edit/delete/display)
-                                        STEP=>2),
-                                        
-                "id_atable" => array(SHOW => true, SEARCH => true, EDIT => true, QEDIT => false, 
-                       TYPE => FK, ANSWER => "atable", "ANSMODULE" => "pag", 
-                       SIZE => 40, "DEFAULT" => 0, 'STEP' =>2),
-                
-                 
-                "pdocument_id" => array("SHOW" => true, "RETRIEVE" => false, "EDIT" => true, 
-                                   TYPE => FK, ANSWER => ptext, ANSMODULE => bau, 
-                                   SIZE => 40, "QEDIT" => true, "DEFAULT" => 0, 
-                                   WHERE=>"ptext_type_id=5", 'STEP' =>2),
-                
-                "parent_ptext_id" => array("SHOW" => true, "RETRIEVE" => true, "EDIT" => true, 
-                                             TYPE => FK, ANSWER => ptext, ANSMODULE => bau, 
-                                             SIZE => 40, "QEDIT" => false, "DEFAULT" => 0, 
-                                             WHERE=>"ptext_type_id=6 and id != '§id§'", 'STEP' =>2),
-
-                "related_ptext_id" => array("SHOW" => true, "RETRIEVE" => false, "SEARCH" => false, "EDIT" => true, "QEDIT" => false, 
-                      TYPE => FK, ANSWER => ptext, ANSMODULE => bau, 
-                      SIZE => 40, "DEFAULT" => 0, 
-                      WHERE=>"ptext_type_id = 3 and id != '§id§'", 'STEP' =>2),
-
-                 
-		
-                
-		"titre_short" => array("SHOW" => true, "RETRIEVE" => true, "EDIT" => true, "QEDIT" => true, SEARCH => true, QSEARCH => true, "UTF8" => true, "SIZE" => 80, "TYPE" => "TEXT", 'STEP' =>3),
-		"ntext" => array("SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "QEDIT" => true, "TYPE" => "TEXT", "UTF8" => true, SEARCH => true, QSEARCH => true, 
-                                  SIZE => AREA, ROWS => 12, COLS => 100, "INPUT-STYLE"=>"height:220px !important;overflow:auto;", "FORMAT" => "PARAGRAPH-TOHTML", 'STEP' =>3, ),
-                
-                "pnum" => array("IMPORTANT" => "IN", "SHOW" => true, "SEARCH" => false, "QEDIT" => false, "RETRIEVE" => true, "EDIT" => true, "TYPE" => "INT", 'STEP' =>3),
-                
-                "spcount" => array("SHOW" => true, "SEARCH" => false, "QEDIT" => false, "RETRIEVE" => true, "EDIT" => true, "TYPE" => "INT", 
-                                    STEP=>3, 
-                                    "CAN-BE-SETTED"=>true, 
-                                    "DIRECT_ACCESS"=>true,
-                                    "CATEGORY" => "FORMULA", "PHP_FORMULA"=>"count.itemList"),
-
-		"ptext_status_id" => array("SHOW" => true, "RETRIEVE" => true, SEARCH => true, "EDIT" => false, "QEDIT" => false, "EDIT-STATUS" => true, TYPE => FK, ANSWER => ptext_status, ANSMODULE => bau, "SIZE" => 40, "DEFAULT" => 1, 'STEP' =>4),
-		"ptext_status_comment" => array("SHOW" => true, "RETRIEVE" => false, SEARCH => true, "EDIT" => false, "QEDIT" => false, "EDIT-STATUS" => true, "TYPE" => "TEXT", "UTF8" => true, "SIZE" => "AREA", 'STEP' =>4),
-                
-                itemList => array(TYPE => FK, ANSWER => ptext, ANSMODULE => bau, CATEGORY => ITEMS, ITEM => 'parent_ptext_id', WHERE=>'', SHOW => true, FORMAT=>retrieve, EDIT => false, ICONS=>true, 'DELETE-ICON'=>false, BUTTONS=>true, "NO-LABEL"=>true, 'STEP' =>5),
-                relatedList => array(TYPE => FK, ANSWER => ptext, ANSMODULE => bau, CATEGORY => ITEMS, ITEM => 'related_ptext_id', WHERE=>'', SHOW => true, FORMAT=>retrieve, EDIT => false, ICONS=>true, 'DELETE-ICON'=>false, BUTTONS=>true, "NO-LABEL"=>true, 'STEP' =>6),
-
-
-		"id_aut" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "auser", "ANSMODULE" => "ums", "TYPE" => "FK", "SIZE" => 40, "DEFAULT" => 0),
-		"date_aut" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "DATETIME"),
-		"id_mod" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "auser", "ANSMODULE" => "ums", "TYPE" => "FK", "SIZE" => 40, "DEFAULT" => 0),
-		"date_mod" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "DATETIME"),
-		"id_valid" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "auser", "ANSMODULE" => "ums", "TYPE" => "FK", "SIZE" => 40, "DEFAULT" => 0),
-		"date_valid" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "DATE"),
-		"avail" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "DEFAULT" => "Y", "TYPE" => "YN"),
-		"version" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "TYPE" => "INT"),
-		"update_groups_mfk" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "ugroup", "ANSMODULE" => "ums", "TYPE" => "MFK"),
-		"delete_groups_mfk" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "ugroup", "ANSMODULE" => "ums", "TYPE" => "MFK"),
-		"display_groups_mfk" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "ugroup", "ANSMODULE" => "ums", "TYPE" => "MFK"),
-		"sci_id" => array("SHOW-ADMIN" => true, "RETRIEVE" => false, "EDIT" => false, "ANSWER" => "scenario_item", "ANSMODULE" => "pag", "TYPE" => "FK", "SIZE" => 40, "DEFAULT" => 0)
-	);
-        
-        
-        public $details = array();
-        
-	*/ public function __construct($tablename="ptext"){
+	public static $DATABASE		= ""; 
+    public static $MODULE		    = "bau"; 
+    public static $TABLE			= "ptext"; 
+    
+    public static $DB_STRUCTURE = null; 
+    
+    
+    public function __construct($tablename="ptext"){
 		parent::__construct($tablename,"id","bau");
                 $this->DISPLAY_FIELD = "titre_short";
                 $this->SubTypesField = "ptext_type_id";
