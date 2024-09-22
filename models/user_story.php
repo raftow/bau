@@ -32,108 +32,10 @@ class UserStory extends AFWObject{
         
 	public static $DATABASE		= ""; 
         public static $MODULE		    = "bau"; 
-        public static $TABLE			= ""; 
-        public static $DB_STRUCTURE = null; /* array(
-                id => array(SHOW => true, RETRIEVE => true, EDIT => true, TYPE => PK),
-
-                "system_id" => array("IMPORTANT" => "IN", "SEARCH" => false, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "SIZE" => 40, "UTF8" => false, 
-                                      "TYPE" => "FK", "ANSWER" => module, "ANSMODULE" => ums, MANDATORY=>true,
-                                      WHERE => "id_module_type in (4,7) and ('§CONTEXT_ID§'='' or id_system = '§CONTEXT_ID§')", 
-                                      QEDIT => false, "SHORTNAME"=>"system", "SEARCH-BY-ONE"=>true,
-                                      "DEFAULT" => 0),
-		
-		"module_id" => array("IMPORTANT" => "IN", "SEARCH" => false, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "SIZE" => 40, "UTF8" => false, 
-                                      "TYPE" => "FK", "ANSWER" => module, "ANSMODULE" => ums, MANDATORY=>true, 
-                                      WHERE => "id_module_type = 5 and id_system = §system_id§", 
-                                      QEDIT => false, "SHORTNAME"=>"module", "SEARCH-BY-ONE"=>true,
-                                      RELATION => OneToMany, "DEFAULT" => 0),
-
-		"jobrole_id" => array("SHORTNAME" => "jobrole", "SEARCH" => false, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "QEDIT" => true, "SIZE" => 40, "UTF8" => false, 
-                                       "TYPE" => "FK", "ANSWER" => jobrole, "ANSMODULE" => pag, MANDATORY=>true, PILLAR=>true, 
-                                       WHERE => "id_domain in (select id_pm from module where id=§module_id§) and avail='Y'", 
-                                       RELATION => OneToMany, "DEFAULT" => 0),
-
-		"bfunction_id" => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE" => false, 
-                                        "EDIT" => true, "QEDIT" => true, "SIZE" => 40, "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => false, 
-                                        "TYPE" => "FK", "ANSWER" => bfunction, "ANSMODULE" => ums, MANDATORY=>true,
-                                        WHERE => "id_system = §system_id§ and bfunction_type_id in (select id from bfunction_type where avail = 'Y' and for_role = 'Y')",
-                                        AUTOCOMPLETE=>[
-                                                           "CREATE" => [
-                                                                        "titre_short" => array("INPUT" => true),
-                                                                        "titre" => array("INPUT" => true),
-                                                        		"id_system" => array("FIELD" => "system_id"),
-                                                                        "curr_class_module_id" => array("FIELD" => "module_id"),
-                                                                        "bfunction_code" => array("CONST"=>"US_", "FIELD" => "id", "CONST2"=>"_SCREEN"),
-                                                                        ],
-                                                            "UK" => array('curr_class_module_id','bfunction_code'),             
-                                                      ], 
-                                        RELATION => OneToMany, "DEFAULT" => 0),
-		"user_story_goal_id" => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "QEDIT" => true, "SIZE" => 40, 
-                                              "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => false,
-                                              "NO-COTE" =>true, 
-                                      TYPE => "FK", "ANSWER" => goal, "ANSMODULE" => bau, MANDATORY=>true,
-                                      WHERE => "jobrole_id = §jobrole_id§ and module_id = §module_id§",
-                                      
-                                      /*AUTOCOMPLETE => [
-                                                           "CREATE" => [
-                                                                        "goal_name_ar" => array("INPUT" => true),
-                                                                        "goal_desc_ar" => array("INPUT" => true),
-                                                        		"system_id" => array("FIELD" => "system_id"),
-                                                                        "jobrole_id" => array("FIELD" => "jobrole_id"),
-                                                                        "module_id" => array("FIELD" => "module_id"),
-                                                                        "goal_type_id" => array("CONST" => "1"),      
-                                                                        ]
-                                                      ],*)  
-                                      RELATION => OneToMany, "DEFAULT" => 0,
-                                      ),
-
-                arole_id => array("IMPORTANT" => "IN", "SEARCH" => false, "SHOW" => true, "RETRIEVE" => true, "EDIT" => true, "QEDIT" => true, "SIZE" => 40, "UTF8" => false, 
-                                   "TYPE" => "FK", "ANSWER" => arole, "ANSMODULE" => ums, MANDATORY => true,
-                                   WHERE=>"id in (select arole_id from c0ums.job_arole where jobrole_id = §jobrole_id§ and module_id = §module_id§ and avail='Y') and (role_code like 'manual%' or role_code = 'goal-§user_story_goal_id§')", 
-                                   DEPENDENCY=>jobrole_id, DEPENDENCIES=>array("module_id","user_story_goal_id"), 
-                                   RELATION => OneToMany, "DEFAULT" => 0, ),
-
-		"user_story_name_ar" => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-AR" => false, "EDIT" => true, "QEDIT" => false, "SIZE" => 64, 
-                                           "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => true, "TYPE" => "TEXT", 'STEP' =>2,),
-		"user_story_desc_ar" => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-AR" => true, "EDIT" => true, "QEDIT" => false, "SIZE" => "AREA", 
-                                           "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => true, "TYPE" => "TEXT", 'STEP' =>2,),
-
-		"user_story_name_en" => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-EN" => false, "EDIT" => true, "QEDIT" => false, "SIZE" => 64, 
-                                           "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => false, "TYPE" => "TEXT", 'STEP' =>2,),
-		"user_story_desc_en" => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE-EN" => true, "EDIT" => true, "QEDIT" => false, "SIZE" => "AREA", 
-                                            "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, "UTF8" => false, "TYPE" => "TEXT", 'STEP' =>2,),
-
-		"my_goal_id" => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE" => false, "EDIT" => false, "QEDIT" => false, "SIZE" =>40,  
-                                              "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "UTF8" => false, "TYPE" => "FK", 
-                                              "ANSWER" => goal, "ANSMODULE" => bau, "DEFAULT" => 0, 'STEP' =>2,),
-                                              
-
-                source => array("IMPORTANT" => "IN", "SEARCH" => true, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "QEDIT" => false, 
-                                  "SIZE" => 32, "UTF8" => false, "TYPE" => "TEXT", 'STEP' =>2,),
-                                  
-                comments => array("SEARCH" => true, "SHOW" => true, "RETRIEVE" => false, "EDIT" => true, "QEDIT" => true, 
-                                   "SEARCH-ADMIN" => true, "SHOW-ADMIN" => true, "EDIT-ADMIN" => true, 
-                                   "UTF8" => true, "TYPE" => "TEXT", "SIZE" => "AREA"),
-
-
-                "is_ok" 	   => array("TYPE" => "TEXT", "CATEGORY" => "FORMULA", "SHOW" => true, "RETRIEVE"=>false, "EDIT" => true, "QEDIT" => false, "READONLY"=>true, "NO-ERROR-CHECK"=>true, 'STEP' =>2),                  
-
-                id_aut => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => FK, ANSWER => auser, ANSMODULE => ums),
-                date_aut => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => DATETIME),
-                id_mod => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => FK, ANSWER => auser, ANSMODULE => ums),
-                date_mod => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => DATETIME),
-                id_valid => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => FK, ANSWER => auser, ANSMODULE => ums),
-                date_valid => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => DATETIME),
-                avail => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, "DEFAULT" => 'Y', TYPE => YN),
-                version => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => INT),
-                update_groups_mfk => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, ANSWER => ugroup, ANSMODULE => ums, TYPE => MFK),
-                delete_groups_mfk => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, ANSWER => ugroup, ANSMODULE => ums, TYPE => MFK),
-                display_groups_mfk => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, ANSWER => ugroup, ANSMODULE => ums, TYPE => MFK),
-                sci_id => array("SHOW-ADMIN" => true, RETRIEVE => false, EDIT => false, TYPE => FK, ANSWER => scenario_item, ANSMODULE => pag),
-                tech_notes 	    => array(TYPE => TEXT, CATEGORY => FORMULA, "SHOW-ADMIN" => true, 'STEP' =>"all", TOKEN_SEP=>"§", READONLY=>true, "NO-ERROR-CHECK"=>true),
-	);
-	
-	*/ public function __construct(){
+        public static $TABLE			= "user_story"; 
+        public static $DB_STRUCTURE = null; 
+        
+        public function __construct(){
 		parent::__construct("user_story","id","bau");
                 $this->QEDIT_MODE_NEW_OBJECTS_DEFAULT_NUMBER = 15;
                 $this->DISPLAY_FIELD = "user_story_name_ar";
@@ -206,7 +108,16 @@ class UserStory extends AFWObject{
            
         }
         
-        
+        public static function loadAll($bfunction_id=0)
+        {
+                $obj = new UserStory();
+                $obj->select("avail",'Y');
+                if($bfunction_id) $obj->select("bfunction_id",$bfunction_id);
+
+                $objList = $obj->loadMany();
+                
+                return $objList;
+        }
         
         
         
