@@ -25,7 +25,7 @@ class Goal extends AFWObject{
 
 	public static $DATABASE		= ""; 
         public static $MODULE		    = "bau"; 
-        public static $TABLE			= ""; 
+        public static $TABLE			= "goal"; 
         public static $DB_STRUCTURE = null; 
         
         

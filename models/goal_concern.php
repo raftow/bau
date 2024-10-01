@@ -16,25 +16,13 @@ $file_dir_name = dirname(__FILE__);
 
 class GoalConcern extends AFWObject{
 
-    public static $MY_ATABLE_ID=13704; 
 
-    // ADMINISTRATIONGOAL - هدف إدارة  
-    public static $GOAL_TYPE_ADMINISTRATION_GOAL = 1; 
-
-    // JOB GOAL - هدف وظيفة  
-    public static $GOAL_TYPE_JOB_GOAL = 2; 
-
-    // JOBRESPONSIBILITYGOAL - هدف مسؤولية وظيفية  
-    public static $GOAL_TYPE_JOB_RESPONSIBILITY_GOAL = 3; 
-                
-	public static $DATABASE		= ""; 
+    public static $DATABASE		= ""; 
     public static $MODULE		    = "bau"; 
     public static $TABLE			= "goal_concern"; 
     
     public static $DB_STRUCTURE = null; 
-    
-    
-    
+
     public function __construct(){
 		parent::__construct("goal_concern","id","bau");
                 $this->QEDIT_MODE_NEW_OBJECTS_DEFAULT_NUMBER = 15;
@@ -48,6 +36,23 @@ class GoalConcern extends AFWObject{
                 $this->qedit_minibox = false;
                 
 	}
+
+    public static $MY_ATABLE_ID=13704; 
+
+    // ADMINISTRATIONGOAL - هدف إدارة  
+    public static $GOAL_TYPE_ADMINISTRATION_GOAL = 1; 
+
+    // JOB GOAL - هدف وظيفة  
+    public static $GOAL_TYPE_JOB_GOAL = 2; 
+
+    // JOBRESPONSIBILITYGOAL - هدف مسؤولية وظيفية  
+    public static $GOAL_TYPE_JOB_RESPONSIBILITY_GOAL = 3; 
+                
+	
+    
+    
+    
+    
         
         public static function loadById($id)
         {
