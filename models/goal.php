@@ -211,7 +211,7 @@ class Goal extends AFWObject{
         public function beforeDelete($id,$id_replace) 
         {
             
-                $server_db_prefix = AfwSession::config("db_prefix","c0");
+                $server_db_prefix = AfwSession::config("db_prefix","default_db_");
             if($id)
             {   
                if($id_replace==0)
@@ -229,7 +229,7 @@ class Goal extends AFWObject{
                         }
 
                         
-                   $server_db_prefix = AfwSession::config("db_prefix","c0"); // FK part of me - deletable 
+                   $server_db_prefix = AfwSession::config("db_prefix","default_db_"); // FK part of me - deletable 
                        // bau.user_story-الهدف	user_story_goal_id  أنا تفاصيل لها-OneToMany
                         $this->execQuery("delete from ${server_db_prefix}bau.user_story where user_story_goal_id = '$id' ");
                        // bau.user_story-الهدف	my_goal_id  جزء مني ولا يعمل إلا بي-OneToOneBidirectional
@@ -245,7 +245,7 @@ class Goal extends AFWObject{
                }
                else
                {
-                        $server_db_prefix = AfwSession::config("db_prefix","c0"); // FK on me 
+                        $server_db_prefix = AfwSession::config("db_prefix","default_db_"); // FK on me 
                        // bau.goal-الهدف الأم	parent_goal_id  أنا تفاصيل لها-OneToMany
                         $this->execQuery("update ${server_db_prefix}bau.goal set parent_goal_id='$id_replace' where parent_goal_id='$id' ");
                        // bau.user_story-الهدف	user_story_goal_id  أنا تفاصيل لها-OneToMany

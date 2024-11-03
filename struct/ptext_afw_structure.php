@@ -47,14 +47,14 @@
 
 			'author_id' => array('SHOW' => true,  'RETRIEVE' => false,  'EDIT' => true,  
 				'TYPE' => 'FK',  'ANSWER' => 'auser',  'ANSMODULE' => 'ums',  
-				'WHERE' => "id in (select auser_id from c0hrm.employee where id_sh_div = §stakeholder_id§)", 
+				'WHERE' => "id in (select auser_id from §DBPREFIX§hrm.employee where id_sh_div = §stakeholder_id§)", 
 				 'QEDIT' => false,  'SIZE' => 40,  'DEFAUT' => 0,  'STEP' => 2,  'SEARCH-BY-ONE' => '',  'DISPLAY' => true,  
 				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
 				),
 
 			'authors_mfk' => array('SHOW' => true,  'SEARCH' => false,  'RETRIEVE' => false,  'EDIT' => false,  'QEDIT' => false,  'EDIT-ADMIN' => true,  
 				'TYPE' => 'MFK',  'ANSWER' => 'auser',  'ANSMODULE' => 'ums',  
-				'WHERE' => "id != §author_id§ and id in (select auser_id from c0hrm.employee where id_sh_div = §stakeholder_id§)", 
+				'WHERE' => "id != §author_id§ and id in (select auser_id from §DBPREFIX§hrm.employee where id_sh_div = §stakeholder_id§)", 
 				 'STEP' => 2,  'SEARCH-BY-ONE' => '',  'DISPLAY' => true,  
 				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
 				),

@@ -26,7 +26,7 @@
 
 			'jobrole_id' => array('SHORTNAME' => 'jobrole',  'SEARCH' => false,  'SHOW' => true,  'RETRIEVE' => false,  'EDIT' => true,  'QEDIT' => true,  'SIZE' => 40,  'UTF8' => false,  
 				'TYPE' => 'FK',  'ANSWER' => 'jobrole',  'ANSMODULE' => 'pag',  'MANDATORY' => true,  'PILLAR' => true,  
-				'WHERE' => "id_domain in (select id_pm from c0ums.module where id=§module_id§) and avail='Y'", 
+				'WHERE' => "id_domain in (select id_pm from §DBPREFIX§ums.module where id=§module_id§) and avail='Y'", 
 				 
 				'RELATION' => 'OneToMany',  'DEFAUT' => 0,  'SEARCH-BY-ONE' => '',  'DISPLAY' => true,  'STEP' => 1,  
 				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '',  'ERROR-CHECK' => true, 
@@ -34,7 +34,7 @@
 
 			'bfunction_id' => array('IMPORTANT' => 'IN',  'SEARCH' => true,  'SHOW' => true,  'RETRIEVE' => false,  'EDIT' => true,  'QEDIT' => true,  'SIZE' => 40,  'SEARCH-ADMIN' => true,  'SHOW-ADMIN' => true,  'EDIT-ADMIN' => true,  'UTF8' => false,  
 				'TYPE' => 'FK',  'ANSWER' => 'bfunction',  'ANSMODULE' => 'ums',  'MANDATORY' => true,  
-				'WHERE' => "id_system = §system_id§ and bfunction_type_id in (select id from c0ums.bfunction_type where avail = 'Y' and for_role = 'Y')", 
+				'WHERE' => "id_system = §system_id§ and bfunction_type_id in (select id from §DBPREFIX§ums.bfunction_type where avail = 'Y' and for_role = 'Y')", 
 				 
 				'AUTOCOMPLETE' => array (
   'CREATE' => 
@@ -82,7 +82,7 @@
 
 			'arole_id' => array('IMPORTANT' => 'IN',  'SEARCH' => false,  'SHOW' => true,  'RETRIEVE' => true,  'EDIT' => true,  'QEDIT' => true,  'SIZE' => 40,  'UTF8' => false,  
 				'TYPE' => 'FK',  'ANSWER' => 'arole',  'ANSMODULE' => 'ums',  'MANDATORY' => true,  
-				'WHERE' => "id in (select arole_id from c0ums.job_arole where jobrole_id = §jobrole_id§ and module_id = §module_id§ and avail='Y') and (role_code like 'manual%' or role_code = 'goal-§user_story_goal_id§')", 
+				'WHERE' => "id in (select arole_id from §DBPREFIX§ums.job_arole where jobrole_id = §jobrole_id§ and module_id = §module_id§ and avail='Y') and (role_code like 'manual%' or role_code = 'goal-§user_story_goal_id§')", 
 				 'DEPENDENCY' => 'jobrole_id',  
 				'DEPENDENCIES' => array (
   0 => 'module_id',

@@ -173,7 +173,7 @@ class RAMObjectType extends AFWObject{
         
         public function beforeDelete($id,$id_replace) 
         {
-         $server_db_prefix = AfwSession::config("db_prefix","c0");
+         $server_db_prefix = AfwSession::config("db_prefix","default_db_");
             
             if($id)
             {   
@@ -182,7 +182,7 @@ class RAMObjectType extends AFWObject{
                    // FK part of me - not deletable 
 
                         
-                   $server_db_prefix = AfwSession::config("db_prefix","c0"); // FK part of me - deletable 
+                   $server_db_prefix = AfwSession::config("db_prefix","default_db_"); // FK part of me - deletable 
 
                    
                    // FK not part of me - replaceable 
@@ -196,7 +196,7 @@ class RAMObjectType extends AFWObject{
                }
                else
                {
-                        $server_db_prefix = AfwSession::config("db_prefix","c0"); // FK on me 
+                        $server_db_prefix = AfwSession::config("db_prefix","default_db_"); // FK on me 
                        // bau.r_a_m_object-نوع الكيان	object_type_id  حقل يفلتر به-ManyToOne
                         $this->execQuery("update ${server_db_prefix}bau.r_a_m_object set object_type_id='$id_replace' where object_type_id='$id' ");
 
