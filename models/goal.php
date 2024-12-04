@@ -607,7 +607,7 @@ class Goal extends AFWObject{
         {
                 $goal_code = $this->getVal("goal_code");
         
-                return(se_termine_par($goal_code,"-@todo")); 
+                return(AfwStringHelper::stringEndsWith($goal_code,"-@todo")); 
         }
         
         
