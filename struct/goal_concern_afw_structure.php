@@ -56,12 +56,12 @@
 				'WHERE' => "id_module = §application_id§ and is_entity='Y' and id in (0§goal_atable_mfk§0)", 
 				 'DEPENDENCY' => 'application_id',  
 				'TYPE' => 'MFK',  'ANSWER' => 'atable',  'ANSMODULE' => 'pag',  'SEARCH-BY-ONE' => false,  'DISPLAY' => true,  'STEP' => 1,  
-				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '',  'ERROR-CHECK' => true, 
+				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '',  'ERROR-CHECK' => true, 'CSS' => 'width_pct_100', 
 				),
 
 			'operation_men' => array('SHORTNAME' => 'operations',  'SEARCH' => true,  'QSEARCH' => false,  'SHOW' => true,  'RETRIEVE' => true,  'EDIT' => true,  'QEDIT' => true,  'SIZE' => 32,  'REQUIRED' => true,  'UTF8' => false,  
 				'TYPE' => 'MENUM',  'ANSWER' => 'FUNCTION',  'READONLY' => false,  'DEFAUT' => ',1,2,3,',  'ANSMODULE' => 'bau',  'SEARCH-BY-ONE' => false,  'DISPLAY' => true,  'STEP' => 1,  
-				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '',  'MANDATORY' => true,  'ERROR-CHECK' => true, 
+				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '',  'MANDATORY' => true,  'ERROR-CHECK' => true, 'CSS' => 'width_pct_100', 
 				),
 
 			'comment' => array('SEARCH' => true,  'QSEARCH' => true,  'SHOW' => true,  'RETRIEVE' => false,  'EDIT' => true,  'QEDIT' => false,  'SIZE' => 128,  'UTF8' => true,  
