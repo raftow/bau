@@ -608,9 +608,10 @@ class Goal extends AFWObject{
                 
                 foreach($atList as $atableItem)
                 {
+                      $atableItemDisp = $atableItem->getVal("atable_name");
                       list($err,$inf) = $atableItem->genereUserBFs($lang);
-                      if($err) $error .= "for table $atableItem : $err \n<br>\n";
-                      if($inf) $info .= "for table $atableItem : $inf \n<br>\n";
+                      if($err) $error .= "for table $atableItemDisp : genereUserBFs returned this error : $err \n<br>\n";
+                      if($inf) $info .= "for table $atableItemDisp :  genereUserBFs returned This info : $inf \n<br>\n";
                 }
                 
                 return array($error, $info);
