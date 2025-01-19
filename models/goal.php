@@ -294,7 +294,7 @@ class Goal extends AFWObject{
             }    
 	}
         
-        public function getOrCreateAssociatedArole() 
+        public function getOrCreateAssociatedArole($resetProps=false) 
         {
                $file_dir_name = dirname(__FILE__); 
                // 
@@ -324,14 +324,14 @@ class Goal extends AFWObject{
                     $ar = Arole::loadByMainIndex($this->getVal("module_id"), $role_code,$create_obj_if_not_found=true);
                }
                
-               if($ar)
-               {
+               if($ar->is_new or $resetProps)
+               {                
                    $ar->set("parent_arole_id",$parent_arole_id);
                    $ar->set("role_code",$role_code);
-                   $ar->set("titre_short",$this->getVal("goal_name_ar"));
-                   $ar->set("titre_short_en",$this->getVal("goal_name_en"));
-                   $ar->set("titre",$this->getVal("goal_desc_ar"));
-                   $ar->set("titre_en",$this->getVal("goal_desc_en"));
+                   if(!$ar->getVal("titre_short")) $ar->set("titre_short",$this->getVal("goal_name_ar"));
+                   if(!$ar->getVal("titre")) $ar->set("titre",$this->getVal("goal_desc_ar"));
+                   if(!$ar->getVal("titre_short_en")) $ar->set("titre_short_en",$this->getVal("goal_name_en"));
+                   if(!$ar->getVal("titre_en")) $ar->set("titre_en",$this->getVal("goal_desc_en"));
                    
                    if($parent_arole_id==0) $arole_type_id = 10;
                    else $arole_type_id = 20;
