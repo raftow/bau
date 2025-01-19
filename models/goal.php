@@ -605,7 +605,9 @@ class Goal extends AFWObject{
                 $info="";
                 
                 $atList = $this->get("atable_mfk");
-                
+                /**
+                 * @var Atable $atableItem
+                 */
                 foreach($atList as $atableItem)
                 {
                       $atableItemDisp = $atableItem->getVal("atable_name");
@@ -695,9 +697,23 @@ class Goal extends AFWObject{
                 return $objGC;
         }
 
-
         public function fullManageTable($atable_id, $jobrole_id=null, $action="+t")
         {
+                return $this->manageTable($atable_id, $jobrole_id=null, $action="+t", $framework_mode="", $full=true);
+        }
+
+
+        public function manageTable($atable_id, $jobrole_id=null, $action="+t", $framework_mode="qsearch", $full=false)
+        {
+                $lang = AfwLanguageHelper::getGlobalLanguage();
+                $this_goal = $this->getDisplay($lang);
+
+                /**
+                 * @var Arole $aroleObj
+                 */
+                $aroleObj = $this->getOrCreateAssociatedArole();
+                if(!$aroleObj) throw new AfwRuntimeException("the goal `$this_goal` has no role associated !");
+
                 if($action=="+t")
                 {
                         $ids_to_add_arr = [];
@@ -719,7 +735,62 @@ class Goal extends AFWObject{
                 $this->commit();
                 $objGC->commit();
 
-                return $this->resetUserBFs();
+                $this_goal_gc = $objGC->getDisplay($lang);
+
+                $return0 = "@@ $this_goal @@ tables become <br> : ".$this->showAttribute("atable_mfk")."<br>";
+
+                $return1 = "@@@ $this_goal_gc @@@ tables become <br> : ".$objGC->showAttribute("atable_mfk")."<br>";
+
+                
+
+                if($full)
+                {
+                        list($error, $info) = $this->resetUserBFs();
+                        $info .= " " . $return0;
+                        $info .= " " . $return1;
+                }
+                else
+                {
+                        $error = "";
+                        $info = "";
+                        $info .= " " . $return0;
+                        $info .= " " . $return1;
+                        /**
+                         * @var Atable $atableObj
+                         */
+                        $atableObj = Atable::loadById($atable_id);
+                        if($atableObj)
+                        {
+                                $bf_row = $atableObj->createModeScreen($framework_mode);
+
+                                $bfObj = $bf_row["bf"];
+                                if($bfObj and $bfObj->id)
+                                {
+                                        if($action=="+t")
+                                        {
+                                                list($menu_added_error, $menu_added_info) = $aroleObj->addBF($bfObj->id, true);
+                                        }
+                                        else
+                                        {
+                                                list($menu_added_error, $menu_added_info) = $aroleObj->removeBF($bfObj->id);
+                                        }
+
+
+                                        
+                                        if($menu_added_info) $info .= "<br>" . $menu_added_info;
+                                        if($menu_added_error) $error .= "<br>" . $menu_added_error;
+                                }
+                                else $error .= "for table $atable_id the mode $framework_mode creation failed bf_row=".var_export($bf_row,true);
+                        }
+                        else $error .= "the table $atable_id not found";
+                        
+                }
+                
+
+                
+
+
+                return [$error, $info];
         }
 
         
