@@ -48,6 +48,8 @@ class Goal extends AFWObject{
 
         public static function addByCodes($object_code_arr, $object_name_en, $object_name_ar, $object_title_en, $object_title_ar, $update_if_exists=false)
         {
+                throw new AfwRuntimeException("Implementation not yet finished");
+                /*
                 if (count($object_code_arr) != 2) throw new AfwRuntimeException("Atable::addByCodes : 2 params are needed module and table, given : " . var_export($object_code_arr, true));        
                 $table_name = $object_code_arr[0];
                 $module_code = $object_code_arr[1];
@@ -75,7 +77,7 @@ class Goal extends AFWObject{
                 }
                 
 
-                return [$objTable, $message];
+                return [$objTable, $message];*/
         }
         
         public static function loadByMainIndex($system_id, $module_id, $goal_code, $create_obj_if_not_found=false)

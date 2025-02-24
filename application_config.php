@@ -1,7 +1,7 @@
 <?php
 $config_arr = [
         'application_id' => 1233,
-
+        'bau_application_id' => 1233,
         'application_code' => 'bau',
 
         'x_module_means_company'=>true,
