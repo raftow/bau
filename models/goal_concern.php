@@ -34,6 +34,8 @@ class GoalConcern extends AFWObject{
                 $this->showQeditErrors = true;
                 $this->showRetrieveErrors = true;
                 $this->qedit_minibox = false;
+
+                $this->after_save_edit = array("class" => 'Goal', "attribute" => 'goal_id', "currmod" => 'bau', "currstep" => 2);
                 
 	}
 
