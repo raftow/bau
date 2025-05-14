@@ -225,7 +225,7 @@ class Goal extends AFWObject{
         
         public function beforeMAJ($id, $fields_updated) 
         {
-              global $lang;  
+              $lang = AfwLanguageHelper::getGlobalLanguage();  
                 
               if(!$this->getVal("domain_id")) 
               {
