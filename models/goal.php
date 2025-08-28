@@ -42,8 +42,7 @@ class Goal extends AFWObject{
                 $this->general_check_errors = true;
                 // $this->qedit_minibox = true;
                 
-                $this->UNIQUE_KEY = array('system_id','module_id','goal_code');
-                
+                $this->UNIQUE_KEY = array('system_id','module_id','goal_code');                
 	}
 
         public static function addByCodes($object_code_arr, $object_name_en, $object_name_ar, $object_title_en, $object_title_ar, $update_if_exists=false)
