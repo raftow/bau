@@ -19,7 +19,7 @@ class Goal extends AFWObject{
         // COMMONADMINISTRATIONGOAL - هدف إدارة مشترك  
         public static $GOAL_TYPE_COMMON_ADMINISTRATION_GOAL = 2; 
  
-        // JOBRESPONSIBILITYGOAL - هدف مسؤولية وظيفية  
+        // JOBRESPONSIBILITYGOAL - هدف مهمة وظيفية  
         public static $GOAL_TYPE_JOB_RESPONSIBILITY_GOAL = 3;
         
 

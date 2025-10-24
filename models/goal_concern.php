@@ -47,7 +47,7 @@ class GoalConcern extends AFWObject{
     // JOB GOAL - هدف وظيفة  
     public static $GOAL_TYPE_JOB_GOAL = 2; 
 
-    // JOBRESPONSIBILITYGOAL - هدف مسؤولية وظيفية  
+    // JOBRESPONSIBILITYGOAL - هدف مهمة وظيفية  
     public static $GOAL_TYPE_JOB_RESPONSIBILITY_GOAL = 3; 
                 
 	

@@ -325,7 +325,7 @@ class RAMObject extends AFWObject{
             $list_of_items[7] = "جدول";  //     code : ATABLE 
             $list_of_items[6] = "وظيفة";  //     code : BFUNCTION 
             $list_of_items[2] = "مسمى وظيفي";  //     code : JOBNAME 
-            $list_of_items[3] = "مسؤولية وظيفية";  //     code : JOBROLE 
+            $list_of_items[3] = "مهمة وظيفية";  //     code : JOBROLE 
             $list_of_items[4] = "وحدة";  //     code : MODULE 
             $list_of_items[1] = "إدارة";  //     code : ORGUNIT 
             $list_of_items[9] = "علامة تبويبية";  //     code : SCENARIO_ITEM 

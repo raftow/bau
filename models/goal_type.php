@@ -25,7 +25,7 @@ class GoalType extends AFWObject{
         // COMMONADMINISTRATIONGOAL - هدف إدارة مشترك  
         public static $GOAL_TYPE_COMMON_ADMINISTRATION_GOAL = 2; 
  
-        // JOBRESPONSIBILITYGOAL - هدف مسؤولية وظيفية  
+        // JOBRESPONSIBILITYGOAL - هدف مهمة وظيفية  
         public static $GOAL_TYPE_JOB_RESPONSIBILITY_GOAL = 3;
                 
 	public static $DATABASE		= ""; public static $MODULE		    = "bau"; public static $TABLE			= ""; public static $DB_STRUCTURE = null; /* array(
