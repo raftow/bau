@@ -316,14 +316,35 @@ class Goal extends AFWObject{
                {
                      $parent_arole_id = 0;
                } 
-               
-               $role_code = "goal-$jobGoalId";
-               $ar = Arole::loadByMainIndex($this->getVal("module_id"), $role_code,$create_obj_if_not_found=false);
+               // old codification : try to find it and delete or rename it if found with old code
+               $old_role_code = "goal-$jobGoalId";
+               $arOld = Arole::loadByMainIndex($this->getVal("module_id"), $old_role_code,$create_obj_if_not_found=false);
+               // new codification
                $role_code = "goal-$jobGoalCode";
-               if(!$ar)
-               {
-                    $ar = Arole::loadByMainIndex($this->getVal("module_id"), $role_code,$create_obj_if_not_found=true);
-               }
+               $arNew = Arole::loadByMainIndex($this->getVal("module_id"), $role_code, $create_obj_if_not_found=false);
+               
+                if($arOld and !$arNew)
+                {
+                   // rename it
+                   $arOld->set("role_code",$role_code);
+                   $arOld->update();
+                   $ar = $arOld;
+                }
+                elseif($arOld and $arNew)
+                {
+                    // delete old one
+                    $arOld->delete();
+                    $ar = $arNew;
+                }
+                elseif(!$arOld and $arNew)
+                {
+                    $ar = $arNew;
+                }
+                else
+                {
+                    $ar = Arole::loadByMainIndex($this->getVal("module_id"), $role_code, $create_obj_if_not_found=true);
+                }
+                
                
                if($ar->is_new or $resetProps)
                {                

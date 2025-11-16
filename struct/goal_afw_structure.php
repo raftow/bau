@@ -136,7 +136,7 @@ class BauGoalAfwStructure
 			'ANSWER' => 'module',
 			'ANSMODULE' => 'ums',
 			'RELATION' => 'OneToMany',
-			//'WHERE' => "id_pm = §domain_id§ and id_module_type = 5 and id_system = §system_id§",
+			'WHERE' => "id_pm = §domain_id§ and id_module_type = 5 and id_system = §system_id§",
 
 			'DEPENDENCIES' => array(0 => 'domain_id', 1 => 'system_id',),
 			'DEPENDENT_OFME' => array(0 => 'parent_goal_id',),
