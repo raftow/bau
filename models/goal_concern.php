@@ -113,6 +113,15 @@ class GoalConcern extends AFWObject{
  
         }
 
+        public static function getJobRoleGoalCountUsingTable($jobrole_id,$atable_id)
+        {
+            $obj = new GoalConcern();
+            if(!$atable_id) $obj->_error("getJobRoleGoalCountUsingTable : atable_id is mandatory field");
+            
+            if($jobrole_id) $obj->select("jobrole_id",$jobrole_id);
+            $obj->where("avail = 'Y' and atable_mfk like '%,$atable_id,%'");
+            return $obj->count();
+        }
 
         public static function getJobRoleGoalListUsingTable($jobrole_id,$atable_id)
         {
