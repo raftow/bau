@@ -31,52 +31,43 @@ class Goal extends AFWObject{
         
         public function __construct(){
 		parent::__construct("goal","id","bau");
-                $this->QEDIT_MODE_NEW_OBJECTS_DEFAULT_NUMBER = 15;
-                $this->DISPLAY_FIELD = "goal_name_ar";
-                $this->ORDER_BY_FIELDS = "goal_name_ar";
-                $this->editByStep = true;
-                $this->editNbSteps = 3; 
-                $this->showQeditErrors = true;
-                $this->ENABLE_DISPLAY_MODE_IN_QEDIT=true;
-                $this->showRetrieveErrors = true;
-                $this->general_check_errors = true;
-                // $this->qedit_minibox = true;
-                
-                $this->UNIQUE_KEY = array('system_id','module_id','goal_code');                
+                BauGoalAfwStructure::initInstance($this);                
 	}
 
         public static function addByCodes($object_code_arr, $object_name_en, $object_name_ar, $object_title_en, $object_title_ar, $update_if_exists=false, $command_code_option="")
         {
                 throw new AfwRuntimeException("Implementation not yet finished");
-                /*
-                if (count($object_code_arr) != 2) throw new AfwRuntimeException("Atable::addByCodes : 2 params are needed module and table, given : " . var_export($object_code_arr, true));        
-                $table_name = $object_code_arr[0];
+                
+                if (count($object_code_arr) != 2) throw new AfwRuntimeException("Atable::addByCodes : 2 params are needed goal-module and goal-code, given : " . var_export($object_code_arr, true));        
+                $goal_code = $object_code_arr[0];
                 $module_code = $object_code_arr[1];
-                if (!$module_code or !$table_name) throw new AfwRuntimeException("Atable::addByCodes : module and table are needed, given : module=$module_code and table=$table_name");
+                if (!$module_code or !$goal_code) throw new AfwRuntimeException("Atable::addByCodes : goal-module and goal-code are needed, given : module=$module_code and table=$table_name");
                 if (!$object_name_en or !$object_name_ar or !$object_title_en or !$object_title_ar) throw new AfwRuntimeException("Atable::addByCodes : names and titles are required");
+                
                 $objModule = Module::loadByMainIndex($module_code);
                 if (!$objModule or (!$objModule->id)) throw new AfwRuntimeException("addByCodes : module $module_code not found");
 
-                $objModule_id = $objModule->id;
-                $objTable = Atable::loadByMainIndex($objModule_id, $table_name, true);
-                if(!$objTable) $message = "Strange Error happened because Atable::loadByMainIndex($objModule_id, $table_name) failed !!";
+                $module_id = $objModule->id;
+                $system_id = $objModule->getVal("id_system");
+                $objGoal = Goal::loadByMainIndex($system_id, $module_id, $goal_code, true);
+                if(!$objGoal) $message = "Strange Error happened because Goal::loadByMainIndex($system_id, $module_id, $goal_code, true) failed !!";
                 else
                 {
-                if((!$objTable->is_new) and (!$update_if_exists))
-                {
-                        throw new AfwRuntimeException("This table already exists");
-                }
-                $objTable->set("titre_short_en", $object_name_en);
-                $objTable->set("titre_short", $object_name_ar);
-                if($object_title_en) $objTable->set("titre_u_en", $object_title_en);
-                if($object_title_ar) $objTable->set("titre_u", $object_title_ar);
-                $objTable->commit();
+                        if((!$objGoal->is_new) and (!$update_if_exists))
+                        {
+                                throw new AfwRuntimeException("This goal already exists");
+                        }
+                        $objGoal->set("goal_name_en", $object_name_en);
+                        $objGoal->set("goal_name_ar", $object_name_ar);
+                        if($object_title_en) $objGoal->set("goal_desc_en", $object_title_en);
+                        if($object_title_ar) $objGoal->set("goal_desc_ar", $object_title_ar);
+                        $objTable->commit();
 
-                $message = "successfully done";
+                        $message = "successfully done";
                 }
                 
 
-                return [$objTable, $message];*/
+                return [$objTable, $message];
         }
         
         public static function loadByMainIndex($system_id, $module_id, $goal_code, $create_obj_if_not_found=false)

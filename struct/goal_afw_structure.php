@@ -1,7 +1,34 @@
 <?php
 class BauGoalAfwStructure
 {
+	public static function initInstance(&$obj)
+	{
+		if ($obj instanceof Goal) {
+			$obj->QEDIT_MODE_NEW_OBJECTS_DEFAULT_NUMBER = 15;
+			$obj->DISPLAY_FIELD = "goal_name_ar";
+			$obj->ORDER_BY_FIELDS = "goal_name_ar";
+			$obj->editByStep = true;
+			$obj->editNbSteps = 3; 
+			$obj->showQeditErrors = true;
+			$obj->ENABLE_DISPLAY_MODE_IN_QEDIT=true;
+			$obj->showRetrieveErrors = true;
+			$obj->general_check_errors = true;
+			// $obj->qedit_minibox = true;
+			
+			$obj->UNIQUE_KEY = array('system_id','module_id','goal_code');
+
+
+			$obj->after_save_edit = array("class"=>'Domain',"attribute"=>'domain_id', "currmod"=>'pag', "currstep"=>2);
+		} else {
+			// GoalArTranslator::initData();
+			// GoalEnTranslator::initData();
+		}
+	}
+
 	public static $DB_STRUCTURE = array(
+
+			
+
 
 
 		'id' => array(
