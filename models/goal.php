@@ -107,7 +107,10 @@ class Goal extends AFWObject
 
         public function getWideDisplay($lang = 'ar')
         {
-                return $this->getVal("goal_desc_$lang");
+                $desc = $this->getVal("goal_desc_$lang");
+                if (!$desc)
+                        $desc = $this->getVal("goal_name_$lang");
+                return $desc;
         }
 
         public function getDisplay($lang = 'ar')
