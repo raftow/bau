@@ -8,17 +8,17 @@ class BauGoalAfwStructure
 			$obj->DISPLAY_FIELD = "goal_name_ar";
 			$obj->ORDER_BY_FIELDS = "goal_name_ar";
 			$obj->editByStep = true;
-			$obj->editNbSteps = 3; 
+			$obj->editNbSteps = 3;
 			$obj->showQeditErrors = true;
-			$obj->ENABLE_DISPLAY_MODE_IN_QEDIT=true;
+			$obj->ENABLE_DISPLAY_MODE_IN_QEDIT = true;
 			$obj->showRetrieveErrors = true;
 			$obj->general_check_errors = true;
 			// $obj->qedit_minibox = true;
-			
-			$obj->UNIQUE_KEY = array('system_id','module_id','goal_code');
+
+			$obj->UNIQUE_KEY = array('system_id', 'module_id', 'goal_code');
 
 
-			$obj->after_save_edit = array("class"=>'Domain',"attribute"=>'domain_id', "currmod"=>'pag', "currstep"=>2);
+			$obj->after_save_edit = array("class" => 'Domain', "attribute" => 'domain_id', "currmod" => 'pag', "currstep" => 2);
 		} else {
 			// GoalArTranslator::initData();
 			// GoalEnTranslator::initData();
@@ -27,7 +27,7 @@ class BauGoalAfwStructure
 
 	public static $DB_STRUCTURE = array(
 
-			
+
 
 
 
@@ -217,7 +217,7 @@ class BauGoalAfwStructure
 			'UTF8' => false,
 			'TYPE' => 'FK',
 			'ANSWER' => 'jobrole',
-			'ANSMODULE' => 'pag',
+			'ANSMODULE' => 'ums',
 			'MANDATORY' => true,
 			'SHORTNAME' => 'resp',
 			'WHERE' => "id_domain in (1,§domain_id§)",
@@ -451,7 +451,7 @@ class BauGoalAfwStructure
 			'STEP' => 2,
 			'TYPE' => 'MFK',
 			'ANSWER' => 'jobrole',
-			'ANSMODULE' => 'pag',
+			'ANSMODULE' => 'ums',
 			'CATEGORY' => 'FORMULA',
 			'SHOW' => true,
 			'RETRIEVE' => false,
