@@ -6,5 +6,6 @@
 	$trad["goal_concern"]["orgunit_id"] = "Organisation unit";
 	$trad["goal_concern"]["jobsdd_id"] = "Jobsdd";
 	$trad["goal_concern"]["jobrole_id"] = "Jobrole";
+	$trad["goal_concern"]["arole_id"] = "Previlege";
 	$trad["goal_concern"]["comment"] = "Comment";
 ?>

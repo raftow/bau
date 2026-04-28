@@ -187,7 +187,7 @@ class UserStory extends AFWObject
                                 if ((!$goal_id) and $atable) {
                                         $atable_id = $atable->getId();
                                         $jobrole_id = $jobrole->getId();
-                                        require_once ("$file_dir_name/../bau/goal_concern.php");
+                                        
                                         $goalList = GoalConcern::getJobRoleGoalListUsingTable($jobrole_id, $atable_id);
 
                                         if (count($goalList) > 0) {
@@ -209,7 +209,7 @@ class UserStory extends AFWObject
                                  * {
                                  *       $atable_id = $atable->getId();
                                  *       $orgUnitList = $module->get("orgUnitList");
-                                 *       require_once("$file_dir_name/../bau/goal_concern.php");
+                                 *       
                                  *
                                  *       foreach($orgUnitList as $orgUnitObj)
                                  *       {
@@ -345,6 +345,7 @@ class UserStory extends AFWObject
                 global $lang, $MODE_BATCH_LOURD;
                 $old_MODE_BATCH_LOURD = $MODE_BATCH_LOURD;
                 $MODE_BATCH_LOURD = true;
+
                 // throw new AfwRuntimeException("Fields Updated : ".var_export($fields_updated,true));
                 if ($this->isActive()) {
                         $file_dir_name = dirname(__FILE__);
@@ -354,12 +355,21 @@ class UserStory extends AFWObject
                         $bfunction = $this->het('bfunction_id');
                         /** @var Goal $goal */
                         $goal = $this->het('user_story_goal_id');
+                        $role = $this->het('arole_id'); 
 
                         if (($fields_updated['jobrole_id']) or ($fields_updated['user_story_goal_id']) or ($fields_updated['bfunction_id'])) {
                                 $name_to_regenere = true;
                         }
 
                         if ($jobrole and $bfunction and $module) {
+                                $role_ar = "......";
+                                $role_en = "......";
+                                if($role) {
+                                        $role_ar = $role->getShortDisplay('ar');
+                                        $role_en = $role->getShortDisplay('en');
+                                }
+                                
+
                                 $jobrole_ar = $jobrole->getShortDisplay('ar');
                                 $jobrole_en = $jobrole->getShortDisplay('en');
                                 if (!$jobrole_en)
@@ -393,13 +403,13 @@ class UserStory extends AFWObject
 
                                 if ((!trim($this->getVal('user_story_name_ar'))) or $name_to_regenere) {
                                         $this->set('user_story_name_ar', "قيام $jobrole_ar بـ : $bfunction_ar");
-                                        $this->set('user_story_desc_ar', "بإعتباري $jobrole_ar أود $bfunction_ar لأجل  $goal_ar");
+                                        $this->set('user_story_desc_ar', "بإعتباري $jobrole_ar أود $bfunction_ar لأجل  $goal_ar باستخدام الصلاحية $role_ar");
                                 } else
                                         $this->maj_code .= '<br>no_need_to_genere_arabic';
 
                                 if ((!trim($this->getVal('user_story_name_en'))) or $name_to_regenere) {
                                         $this->set('user_story_name_en', "$jobrole_en do $bfunction_en");
-                                        $this->set('user_story_desc_en', "As $jobrole_en I want to $bfunction_en so that  $goal_en");
+                                        $this->set('user_story_desc_en', "As $jobrole_en I want to $bfunction_en so that  $goal_en using previlege $role_en");
                                 } else
                                         $this->maj_code .= '<br>no_need_to_genere_english';
 
@@ -439,7 +449,7 @@ class UserStory extends AFWObject
                         } else
                                 $this->maj_code .= "<br> triplet jobrole:$jobrole and bfunction:$bfunction and module:$module is not ready";
 
-                        $this->genereMenusForMe($lang);
+                        // $this->genereMenusForMe($lang);
                 }
                 // $this->showQueryAndHalt = true;
 
@@ -463,7 +473,7 @@ class UserStory extends AFWObject
                 if ($arole and $bfunction) {
                         list($warn, $err, $info) = $bfunction->updateMeInArole($arole, $menu = -1, $lang);
                         if ($warn)
-                                $info .= $warn;
+                                $info .= "warning : ".$warn;
                 }
 
                 return array($err, $info);

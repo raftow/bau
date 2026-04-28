@@ -547,6 +547,10 @@ class Goal extends AFWObject
 
         public function resetUserBFs($lang = 'ar')
         {
+                global $MODE_BATCH_LOURD;
+                $old_MODE_BATCH_LOURD = $MODE_BATCH_LOURD;
+                $MODE_BATCH_LOURD = true;
+
                 $error = '';
                 $info = '';
 
@@ -560,7 +564,8 @@ class Goal extends AFWObject
                         if ($inf)
                                 $info .= "for table $atableItemDisp :  genereUserBFs returned This info : $inf \n<br>\n";
                 }
-
+                AfwQueryAnalyzer::resetQueriesExecuted();
+                $MODE_BATCH_LOURD = $old_MODE_BATCH_LOURD;
                 return array($error, $info);
         }
 

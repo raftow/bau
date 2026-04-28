@@ -1,6 +1,32 @@
 <?php
 class BauGoalConcernAfwStructure
 {
+	// token separator = §
+	public static function initInstance(&$obj)
+	{
+		if ($obj instanceof GoalConcern) {
+			$obj->QEDIT_MODE_NEW_OBJECTS_DEFAULT_NUMBER = 15;
+			$obj->DISPLAY_FIELD_BY_LANG = ['ar' => "", 'en' => ""];
+
+			// $obj->ENABLE_DISPLAY_MODE_IN_QEDIT=true;
+			$obj->ORDER_BY_FIELDS = "goal_id, jobrole_id";
+
+			$obj->AUDIT_DATA = true;
+
+			$obj->UNIQUE_KEY = array('goal_id', 'jobrole_id');
+			$obj->editByStep = false;
+			$obj->editNbSteps = 0;
+			$obj->showQeditErrors = true;
+			$obj->showRetrieveErrors = true;
+			$obj->general_check_errors = true;
+			$obj->after_save_edit = array("class" => 'Goal', "attribute" => 'goal_id', "currmod" => 'bau', "currstep" => 2);
+			// $obj->after_save_edit = array("mode" => "qsearch", "currmod" => 'bau', "class" => 'GoalConcern', "submit" => true);
+
+		} else {
+			// GoalConcernArTranslator::initData();
+			// GoalConcernEnTranslator::initData();
+		}
+	}
 	public static $DB_STRUCTURE = array(
 
 
@@ -182,6 +208,37 @@ class BauGoalConcernAfwStructure
 			'MANDATORY' => true,
 			'ERROR-CHECK' => true,
 			'CSS' => 'width_pct_100',
+		),
+
+		'arole_id' => array(
+			'IMPORTANT' => 'IN',
+			'SEARCH' => false,
+			'SHOW' => true,
+			'RETRIEVE' => true,
+			'EDIT' => true,
+			'QEDIT' => true,
+			'SIZE' => 40,
+			'UTF8' => false,
+			'TYPE' => 'FK',
+			'ANSWER' => 'arole',
+			'ANSMODULE' => 'ums',
+			'MANDATORY' => true,
+			'WHERE' => "id in (select arole_id from §DBPREFIX§ums.job_arole 
+			                    where jobrole_id = §jobrole_id§ 
+								  and module_id = §application_id§ 
+								  and avail='Y')",
+			'DEPENDENCIES' => array(
+				0 => 'jobrole_id',
+				1 => 'application_id',
+			),
+			'RELATION' => 'OneToMany',
+			'DEFAUT' => 0,
+			'SEARCH-BY-ONE' => '',
+			'DISPLAY' => true,
+			'STEP' => 1,
+			'DISPLAY-UGROUPS' => '',
+			'EDIT-UGROUPS' => '',
+			'ERROR-CHECK' => true,
 		),
 
 		'comment' => array(

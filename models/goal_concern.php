@@ -25,18 +25,7 @@ class GoalConcern extends AFWObject{
 
     public function __construct(){
 		parent::__construct("goal_concern","id","bau");
-                $this->QEDIT_MODE_NEW_OBJECTS_DEFAULT_NUMBER = 15;
-                $this->ORDER_BY_FIELDS = "goal_id, jobrole_id";
-                 
-                
-                $this->UNIQUE_KEY = array('goal_id','jobrole_id');
-                
-                $this->showQeditErrors = true;
-                $this->showRetrieveErrors = true;
-                $this->qedit_minibox = false;
-
-                $this->after_save_edit = array("class" => 'Goal', "attribute" => 'goal_id', "currmod" => 'bau', "currstep" => 2);
-                
+        BauGoalConcernAfwStructure::initInstance($this);    
 	}
 
     public static $MY_ATABLE_ID=13704; 

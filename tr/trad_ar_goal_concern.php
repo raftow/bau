@@ -11,6 +11,7 @@
 	$trad["goal_concern"]["application_id.tooltip"] = "يجب أن يكون تطبيقا (فئة5) على نفس النظام ونفس القطاع الذين عليهما الهدف الأم الذي نحن بصدد الاهتمام به"; 
     $trad["goal_concern"]["atable_mfk"] = "الكيانات المستعملة";
     $trad["goal_concern"]["operation_men"] = "العمليات";
+	$trad["goal_concern"]["arole_id"] = "الصلاحية";
          
         
 ?>
