@@ -564,7 +564,7 @@ class Goal extends AFWObject
                         if ($inf)
                                 $info .= "for table $atableItemDisp :  genereUserBFs returned This info : $inf \n<br>\n";
                 }
-                AfwQueryAnalyzer::resetQueriesExecuted();
+                UfwQueryAnalyzer::resetQueriesExecuted();
                 $MODE_BATCH_LOURD = $old_MODE_BATCH_LOURD;
                 return array($error, $info);
         }
