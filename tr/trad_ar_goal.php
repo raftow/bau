@@ -34,8 +34,9 @@ $trad["goal"]["domain_id"] = "قطاع الأعمال";
 
 
 $trad["goal"]["step1"] = "البيانات الأساسية";
-$trad["goal"]["step2"] = "السعي في تحقيقه";
-$trad["goal"]["step3"] = "قصص المستخدم";
+$trad["goal"]["step2"] = "البيانات الفنية";
+$trad["goal"]["step3"] = "السعي في تحقيقه";
+$trad["goal"]["step4"] = "قصص المستخدم";
 
 $trad["goal"]["text"] = "التعريف بالهدف";
 $trad["goal"]["prop"] = "خصائص الهدف";

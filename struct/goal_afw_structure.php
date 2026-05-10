@@ -8,7 +8,7 @@ class BauGoalAfwStructure
 			$obj->DISPLAY_FIELD = "goal_name_ar";
 			$obj->ORDER_BY_FIELDS = "goal_name_ar";
 			$obj->editByStep = true;
-			$obj->editNbSteps = 3;
+			$obj->editNbSteps = 4;
 			$obj->showQeditErrors = true;
 			$obj->ENABLE_DISPLAY_MODE_IN_QEDIT = true;
 			$obj->showRetrieveErrors = true;
@@ -258,7 +258,7 @@ class BauGoalAfwStructure
 			'ANSMODULE' => 'pag',
 			'SEARCH-BY-ONE' => false,
 			'DISPLAY' => true,
-			'STEP' => 1,
+			'STEP' => 2,
 			'DISPLAY-UGROUPS' => '',
 			'EDIT-UGROUPS' => '',
 			'ERROR-CHECK' => true,
@@ -292,6 +292,7 @@ class BauGoalAfwStructure
 			'SEARCH-ADMIN' => true,
 			'SHOW-ADMIN' => true,
 			'EDIT-ADMIN' => true,
+			'MANDATORY' => true,
 			'UTF8' => true,
 			'TYPE' => 'TEXT',
 			'CHAR_TEMPLATE' => 'TEXT_AR',
@@ -307,6 +308,7 @@ class BauGoalAfwStructure
 			'IMPORTANT' => 'IN',
 			'SEARCH' => true,
 			'SHOW' => true,
+			'MANDATORY' => true,
 			'RETRIEVE-EN' => false,
 			'EDIT' => true,
 			'QEDIT' => false,
@@ -404,7 +406,7 @@ class BauGoalAfwStructure
 		),
 
 		'goalConcernList' => array(
-			'STEP' => 2,
+			'STEP' => 3,
 			'TYPE' => 'FK',
 			'ANSWER' => 'goal_concern',
 			'ANSMODULE' => 'bau',
@@ -427,7 +429,7 @@ class BauGoalAfwStructure
 		),
 
 		'goalList' => array(
-			'STEP' => 2,
+			'STEP' => 3,
 			'TYPE' => 'FK',
 			'ANSWER' => 'goal',
 			'ANSMODULE' => 'bau',
@@ -448,7 +450,7 @@ class BauGoalAfwStructure
 		),
 
 		'jobroleList' => array(
-			'STEP' => 2,
+			'STEP' => 3,
 			'TYPE' => 'MFK',
 			'ANSWER' => 'jobrole',
 			'ANSMODULE' => 'ums',
@@ -466,7 +468,7 @@ class BauGoalAfwStructure
 		),
 
 		'userStoryList' => array(
-			'STEP' => 3,
+			'STEP' => 4,
 			'TYPE' => 'FK',
 			'ANSWER' => 'user_story',
 			'ANSMODULE' => 'bau',
