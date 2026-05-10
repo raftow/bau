@@ -11,7 +11,7 @@ class BauGoalConcernAfwStructure
 			// $obj->ENABLE_DISPLAY_MODE_IN_QEDIT=true;
 			$obj->ORDER_BY_FIELDS = "goal_id, jobrole_id";
 
-			$obj->AUDIT_DATA = true;
+			// $obj->AUDIT_DATA = true;
 
 			$obj->UNIQUE_KEY = array('goal_id', 'jobrole_id');
 			$obj->editByStep = false;
