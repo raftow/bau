@@ -19,7 +19,7 @@ class BauGoalConcernAfwStructure
 			$obj->showQeditErrors = true;
 			$obj->showRetrieveErrors = true;
 			$obj->general_check_errors = true;
-			$obj->after_save_edit = array("class" => 'Goal', "attribute" => 'goal_id', "currmod" => 'bau', "currstep" => 2);
+			$obj->after_save_edit = array("class" => 'Goal', "attribute" => 'goal_id', "currmod" => 'bau', "currstep" => 3);
 			// $obj->after_save_edit = array("mode" => "qsearch", "currmod" => 'bau', "class" => 'GoalConcern', "submit" => true);
 
 		} else {
@@ -37,48 +37,6 @@ class BauGoalConcernAfwStructure
 			'TYPE' => 'PK',
 			'SEARCH-BY-ONE' => '',
 			'DISPLAY' => true,
-			'STEP' => 1,
-			'DISPLAY-UGROUPS' => '',
-			'EDIT-UGROUPS' => '',
-		),
-
-		'goal_atable_mfk' => array(
-			'CATEGORY' => 'SHORTCUT',
-			'SHORTCUT' => 'goal.atable_mfk',
-			'TYPE' => 'MFK',
-			'ANSWER' => 'atable',
-			'ANSMODULE' => 'pag',
-			'NO-COTE' => true,
-			'SEARCH-BY-ONE' => '',
-			'DISPLAY' => '',
-			'STEP' => 1,
-			'DISPLAY-UGROUPS' => '',
-			'EDIT-UGROUPS' => '',
-		),
-
-		'goal_system_id' => array(
-			'CATEGORY' => 'SHORTCUT',
-			'SHORTCUT' => 'goal.system_id',
-			'TYPE' => 'MFK',
-			'ANSWER' => 'module',
-			'ANSMODULE' => 'ums',
-			'NO-COTE' => true,
-			'SEARCH-BY-ONE' => '',
-			'DISPLAY' => '',
-			'STEP' => 1,
-			'DISPLAY-UGROUPS' => '',
-			'EDIT-UGROUPS' => '',
-		),
-
-		'goal_domain_id' => array(
-			'CATEGORY' => 'SHORTCUT',
-			'SHORTCUT' => 'goal.domain_id',
-			'TYPE' => 'MFK',
-			'ANSWER' => 'domain',
-			'ANSMODULE' => 'pag',
-			'NO-COTE' => true,
-			'SEARCH-BY-ONE' => '',
-			'DISPLAY' => '',
 			'STEP' => 1,
 			'DISPLAY-UGROUPS' => '',
 			'EDIT-UGROUPS' => '',
@@ -106,31 +64,7 @@ class BauGoalConcernAfwStructure
 			'DISPLAY-UGROUPS' => '',
 			'EDIT-UGROUPS' => '',
 			'ERROR-CHECK' => true,
-		),
-
-		'application_id' => array(
-			'SHORTNAME' => 'application',
-			'SEARCH' => false,
-			'QSEARCH' => false,
-			'SHOW' => true,
-			'RETRIEVE' => true,
-			'EDIT' => true,
-			'QEDIT' => true,
-			'SIZE' => 40,
-			'MANDATORY' => true,
-			'UTF8' => false,
-			'TYPE' => 'FK',
-			'ANSWER' => 'module',
-			'ANSMODULE' => 'ums',
-			'WHERE' => "id_module_type=5 and id_system = §goal_system_id§ and id_pm = §goal_domain_id§ ",
-			'DEPENDENT_OFME' => array(0 => 'atable_mfk',),
-			'DEFAUT' => 0,
-			'SEARCH-BY-ONE' => false,
-			'DISPLAY' => true,
-			'STEP' => 1,
-			'DISPLAY-UGROUPS' => '',
-			'EDIT-UGROUPS' => '',
-			'ERROR-CHECK' => true,
+			'READONLY' => true,
 		),
 
 		'jobrole_id' => array(
@@ -158,6 +92,77 @@ class BauGoalConcernAfwStructure
 			'EDIT-UGROUPS' => '',
 			'ERROR-CHECK' => true,
 		),
+
+		'goal_atable_mfk' => array(
+			'CATEGORY' => 'SHORTCUT',
+			'SHORTCUT' => 'goal_id.atable_mfk',
+			'TYPE' => 'MFK',
+			'ANSWER' => 'atable',
+			'ANSMODULE' => 'pag',
+			'NO-COTE' => true,
+			'SEARCH-BY-ONE' => '',
+			'DISPLAY' => '',
+			'STEP' => 1,
+			'DISPLAY-UGROUPS' => '',
+			'EDIT-UGROUPS' => '',
+		),
+
+		'goal_system_id' => array(
+			'CATEGORY' => 'SHORTCUT',
+			'SHORTCUT' => 'goal_id.system_id',
+			'TYPE' => 'MFK',
+			'ANSWER' => 'module',
+			'ANSMODULE' => 'ums',
+			'NO-COTE' => true,
+			'SEARCH-BY-ONE' => '',
+			'DISPLAY' => '',
+			'STEP' => 1,
+			'DISPLAY-UGROUPS' => '',
+			'EDIT-UGROUPS' => '',
+		),
+
+		'goal_domain_id' => array(
+			'CATEGORY' => 'SHORTCUT',
+			'SHORTCUT' => 'goal_id.domain_id',
+			'TYPE' => 'FK',
+			'ANSWER' => 'domain',
+			'ANSMODULE' => 'pag',
+			'NO-COTE' => true,
+			'SEARCH-BY-ONE' => '',
+			'DISPLAY' => '',
+			'STEP' => 1,
+			'DISPLAY-UGROUPS' => '',
+			'EDIT-UGROUPS' => '',
+		),
+
+
+
+		'application_id' => array(
+			'SHORTNAME' => 'application',
+			'SEARCH' => false,
+			'QSEARCH' => false,
+			'SHOW' => true,
+			'RETRIEVE' => true,
+			'EDIT' => true,
+			'QEDIT' => true,
+			'SIZE' => 40,
+			'MANDATORY' => true,
+			'UTF8' => false,
+			'TYPE' => 'FK',
+			'ANSWER' => 'module',
+			'ANSMODULE' => 'ums',
+			'WHERE' => "id_module_type=5 and id_system = §goal_system_id§ and id_pm = §goal_domain_id§ ",
+			'DEPENDENT_OFME' => array(0 => 'atable_mfk',),
+			'DEFAUT' => 0,
+			'SEARCH-BY-ONE' => false,
+			'DISPLAY' => true,
+			'STEP' => 1,
+			'DISPLAY-UGROUPS' => '',
+			'EDIT-UGROUPS' => '',
+			'ERROR-CHECK' => true,
+		),
+
+
 
 		'atable_mfk' => array(
 			'SHORTNAME' => 'atables',
