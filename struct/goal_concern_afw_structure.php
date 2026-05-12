@@ -126,7 +126,7 @@ class BauGoalConcernAfwStructure
 			'SHORTCUT' => 'goal_id.domain_id',
 			'TYPE' => 'FK',
 			'ANSWER' => 'domain',
-			'ANSMODULE' => 'pag',
+			'ANSMODULE' => 'cmn',
 			'NO-COTE' => true,
 			'SEARCH-BY-ONE' => '',
 			'DISPLAY' => '',

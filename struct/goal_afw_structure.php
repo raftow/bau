@@ -50,7 +50,7 @@ class BauGoalAfwStructure
 			'EDIT' => true,
 			'TYPE' => 'FK',
 			'ANSWER' => 'domain',
-			'ANSMODULE' => 'pag',
+			'ANSMODULE' => 'cmn',
 			'RELATION' => 'OneToMany',
 			'WHERE' => "",
 			'QEDIT' => true,
