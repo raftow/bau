@@ -51,43 +51,49 @@ class Goal extends AFWObject
                 $update_if_exists = false,
                 $command_code_option = ''
         ) {
-                throw new AfwRuntimeException('Implementation not yet finished');
-
-                if (count($object_code_arr) != 2)
-                        throw new AfwRuntimeException('Atable::addByCodes : 2 params are needed goal-module and goal-code, given : ' . var_export($object_code_arr, true));
-                $goal_code = $object_code_arr[0];
+                if (count($object_code_arr) < 2)
+                        throw new AfwRuntimeException('addByCodes : 3 params are needed module and goal code, given : ' . var_export($object_code_arr, true));
                 $module_code = $object_code_arr[1];
-                if (!$module_code or !$goal_code)
-                        throw new AfwRuntimeException("Atable::addByCodes : goal-module and goal-code are needed, given : module=$module_code and table=$table_name");
-                if (!$object_name_en or !$object_name_ar or !$object_title_en or !$object_title_ar)
-                        throw new AfwRuntimeException('Atable::addByCodes : names and titles are required');
+                $goal_code = $object_code_arr[0];
 
+                AfwAutoLoader::addModule($module_code);
+
+                if (!$module_code or !$goal_code)
+                        throw new AfwRuntimeException("addByCodes : module and goal code are needed, given : module=$module_code and goal_code=$goal_code, given array : " . var_export($object_code_arr, true));
                 $objModule = Module::loadByMainIndex($module_code);
                 if (!$objModule or (!$objModule->id))
                         throw new AfwRuntimeException("addByCodes : module $module_code not found");
+                $objModule_id = $objModule->id;
+                $system_id = $objModule->getVal("id_system");
+                $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
 
-                $module_id = $objModule->id;
-                $system_id = $objModule->getVal('id_system');
-                $objGoal = Goal::loadByMainIndex($system_id, $module_id, $goal_code, true);
                 if (!$objGoal)
-                        $message = "Strange Error happened because Goal::loadByMainIndex($system_id, $module_id, $goal_code, true) failed !!";
+                        $message = "Strange Error happened because Goal::loadByMainIndex($objModule_id, $goal_code, true) failed !!";
                 else {
                         if ((!$objGoal->is_new) and (!$update_if_exists)) {
                                 throw new AfwRuntimeException('This goal already exists');
                         }
-                        $objGoal->set('goal_name_en', $object_name_en);
-                        $objGoal->set('goal_name_ar', $object_name_ar);
+                        $objGoal->set('goal_type_id', Goal::$GOAL_TYPE_JOB_RESPONSIBILITY_GOAL);
+                        $objGoal->set('titre_short_en', $object_name_en);
+                        $objGoal->set('titre_short', $object_name_ar);
                         if ($object_title_en)
-                                $objGoal->set('goal_desc_en', $object_title_en);
+                                $objGoal->set('titre_en', $object_title_en);
                         if ($object_title_ar)
-                                $objGoal->set('goal_desc_ar', $object_title_ar);
-                        $objTable->commit();
+                                $objGoal->set('titre', $object_title_ar);
+                        $objGoal->commit();
+
 
                         $message = 'successfully done';
                 }
 
-                return [$objTable, $message];
+                return [$objGoal, $message];
         }
+
+        /**
+         * @param int $system_id
+         * @param int $module_id
+         * @param string $goal_code
+         */
 
         public static function loadByMainIndex($system_id, $module_id, $goal_code, $create_obj_if_not_found = false)
         {
