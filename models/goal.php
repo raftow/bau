@@ -35,8 +35,22 @@ class Goal extends AFWObject
                 BauGoalAfwStructure::initInstance($this);
         }
 
-        public static function addByCodes($object_code_arr, $object_name_en, $object_name_ar, $object_title_en, $object_title_ar, $update_if_exists = false, $command_code_option = '')
-        {
+        /**
+         * @param array $object_code_arr 
+         * @param string $object_name_en 
+         * @param string $object_name_ar 
+         * @param string $object_title_en 
+         * @param string $object_title_ar
+         */
+        public static function addByCodes(
+                $object_code_arr,
+                $object_name_en,
+                $object_name_ar,
+                $object_title_en,
+                $object_title_ar,
+                $update_if_exists = false,
+                $command_code_option = ''
+        ) {
                 throw new AfwRuntimeException('Implementation not yet finished');
 
                 if (count($object_code_arr) != 2)
@@ -735,4 +749,3 @@ class Goal extends AFWObject
                 return [$error, $info];
         }
 }
-?>
