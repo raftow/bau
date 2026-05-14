@@ -342,9 +342,7 @@ class UserStory extends AFWObject
 
         public function beforeMAJ($id, $fields_updated)
         {
-                global $lang, $MODE_BATCH_LOURD;
-                $old_MODE_BATCH_LOURD = $MODE_BATCH_LOURD;
-                $MODE_BATCH_LOURD = true;
+                UfwQueryAnalyzer::startProcessLourdMode();
 
                 // throw new AfwRuntimeException("Fields Updated : ".var_export($fields_updated,true));
                 if ($this->isActive()) {
@@ -453,7 +451,7 @@ class UserStory extends AFWObject
                 }
                 // $this->showQueryAndHalt = true;
 
-                $MODE_BATCH_LOURD = $old_MODE_BATCH_LOURD;
+                UfwQueryAnalyzer::stopProcessLourdMode();
                 return true;
         }
 
