@@ -18,7 +18,7 @@ class BauGoalAfwStructure
 			$obj->UNIQUE_KEY = array('system_id', 'module_id', 'goal_code');
 
 
-			$obj->after_save_edit = array("class" => 'Domain', "attribute" => 'domain_id', "currmod" => 'pag', "currstep" => 2);
+			$obj->after_save_edit = array("class" => 'Domain', "attribute" => 'domain_id', "currmod" => 'cmn', "currstep" => 2);
 		} else {
 			// GoalArTranslator::initData();
 			// GoalEnTranslator::initData();

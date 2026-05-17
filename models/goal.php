@@ -48,23 +48,51 @@ class Goal extends AFWObject
                 $object_name_ar,
                 $object_title_en,
                 $object_title_ar,
+                $other_settings,
                 $update_if_exists = false,
-                $command_code_option = ''
+                $command_code_option = '',
+                $all_command = ''
         ) {
                 if (count($object_code_arr) < 2)
-                        throw new AfwRuntimeException('addByCodes : 3 params are needed module and goal code, given : ' . var_export($object_code_arr, true));
+                        throw new AfwRuntimeException('addByCodes : 2 params are needed module and goal code, command given : ' . $all_command . ', array parsed : ' . var_export($object_code_arr, true));
                 $module_code = $object_code_arr[1];
                 $goal_code = $object_code_arr[0];
 
-                AfwAutoLoader::addModule($module_code);
 
-                if (!$module_code or !$goal_code)
-                        throw new AfwRuntimeException("addByCodes : module and goal code are needed, given : module=$module_code and goal_code=$goal_code, given array : " . var_export($object_code_arr, true));
+
+
+                if ((!$object_code_arr[1]) or (!$object_code_arr[0]))
+                        UfwUtils::dieWithVar("This is Goal addByCodes on : ", [
+                                'object_code_arr' => $object_code_arr,
+                                'module_code' => $module_code,
+                                'goal_code' => $goal_code,
+                                'object_name_en' => $object_name_en,
+                                'object_name_ar' => $object_name_ar,
+                                'object_title_en' => $object_title_en,
+                                'object_title_ar' => $object_title_ar,
+                        ]);
+
+                if ((!$module_code) or (!$goal_code))
+                        throw new AfwRuntimeException("addByCodes : module and goal codes are needed, command given : $all_command, module=$module_code and goal_code=$goal_code, array parsed : " . var_export($object_code_arr, true));
                 $objModule = Module::loadByMainIndex($module_code);
                 if (!$objModule or (!$objModule->id))
-                        throw new AfwRuntimeException("addByCodes : module $module_code not found");
+                        throw new AfwRuntimeException("addByCodes : module oject with code $module_code not found");
                 $objModule_id = $objModule->id;
                 $system_id = $objModule->getVal("id_system");
+                $domain_id = $objModule->getVal("id_pm");
+                if (!$domain_id)
+                        throw new AfwRuntimeException("addByCodes : module oject with code $module_code has no domain defined");
+                // AfwAutoLoader::addModule($module_code);
+                // before add new goal we need to create the associated goal by default
+                $jrole_code = "jr-" . $goal_code;
+                $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
+                if (!$jrObj)
+                        throw new AfwRuntimeException("addByCodes : failed to create jobrole with (domain_id=$domain_id, jrole_code=$jrole_code)");
+                if ($jrObj->is_new) {
+                        $jrObj->set("titre_short_en", "job role to do " . $object_name_en);
+                        $jrObj->set("titre_short", "صلاحية وظيفية لاجل : " . $object_name_ar);
+                        $jrObj->update();
+                }
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
 
                 if (!$objGoal)
@@ -74,16 +102,32 @@ class Goal extends AFWObject
                                 throw new AfwRuntimeException('This goal already exists');
                         }
                         $objGoal->set('goal_type_id', Goal::$GOAL_TYPE_JOB_RESPONSIBILITY_GOAL);
-                        $objGoal->set('titre_short_en', $object_name_en);
-                        $objGoal->set('titre_short', $object_name_ar);
+                        $objGoal->set('domain_id', $domain_id);
+                        $objGoal->set('goal_name_en', $object_name_en);
+                        $objGoal->set('goal_name_ar', $object_name_ar);
                         if ($object_title_en)
-                                $objGoal->set('titre_en', $object_title_en);
+                                $objGoal->set('goal_desc_en', $object_title_en);
                         if ($object_title_ar)
-                                $objGoal->set('titre', $object_title_ar);
-                        $objGoal->commit();
+                                $objGoal->set('goal_desc_ar', $object_title_ar);
 
+                        $objGoal->set('jobrole_id', $jrObj->id);
+                        // here other_settings is list of tables managed by this goal
+                        $arrTableCodes = explode(",", $other_settings);
+                        $atable_mfk = ",";
+                        $warArr = [];
+                        foreach ($arrTableCodes as $tableCode) {
+                                $objTable = Atable::loadByMainIndex($objModule_id, $tableCode);
+                                if (!$objTable or (!$objTable->id)) {
+                                        $warArr[] = "table $tableCode not found in module $module_code";
+                                } else $atable_mfk .= $objTable->id . ",";
+                        }
+                        $objGoal->set('atable_mfk', $atable_mfk);
+                        $objGoal->commit();
+                        $objGoal->genereConcernedGoals("ar", true, $operation_men = ",1,2,3,4,5,");
+                        $objGoal->resetUserBFs("ar");
 
                         $message = 'successfully done';
+                        if (count($warArr) > 0) $message .= ' but with warnings : ' . implode("\n<br>", $warArr);
                 }
 
                 return [$objGoal, $message];
@@ -226,18 +270,7 @@ class Goal extends AFWObject
                 return true;
         }
 
-        public function beforeMAJ($id, $fields_updated)
-        {
-                $lang = AfwLanguageHelper::getGlobalLanguage();
 
-                if (!$this->getVal('domain_id')) {
-                        $resp = $this->hetResp();
-                        if ($resp)
-                                $this->set('domain_id', $resp->getVal('id_domain'));
-                }
-
-                return true;
-        }
 
         public function beforeDelete($id, $id_replace)
         {
@@ -342,6 +375,28 @@ class Goal extends AFWObject
                 }
 
                 return $ar;
+        }
+
+        public function beforeMaj($id, $fields_updated)
+        {
+                // $lang = AfwLanguageHelper::getGlobalLanguage();
+
+                if (!$this->getVal('domain_id')) {
+                        $resp = $this->hetResp();
+                        if ($resp)
+                                $this->set('domain_id', $resp->getVal('id_domain'));
+                }
+
+                if (!$this->getVal("goal_desc_ar") and $this->getVal("goal_name_ar")) {
+                        $this->set("goal_desc_ar", "إدارة " . $this->getVal("goal_name_ar"));
+                }
+
+                if (!$this->getVal("goal_desc_en") and $this->getVal("goal_name_en")) {
+                        $this->set("goal_desc_en", "Management of " . $this->getVal("goal_name_en"));
+                }
+
+
+                return true;
         }
 
         public function getRAMObjectData()
