@@ -114,7 +114,7 @@ class Goal extends AFWObject
                         $arObj->update();
                         $message_arr[] = $arObj->tm("role created", $lang)." : ".$arObj->getDisplay($lang);
                 }
-                
+
                 // create the goal or update it
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
 
@@ -586,9 +586,13 @@ class Goal extends AFWObject
 
                                         $atable_id_arr = array();
 
+                                        /**
+                                         * @var Atable $atableObj
+                                         */
+
                                         foreach ($atableList as $atableObj) {
                                                 $jrList = $atableObj->getEntityManagerJobroles();
-                                                if ($jrList[$jobrole_id])
+                                                if ($jrList[$jobrole_id]or true)
                                                         $atable_id_arr[] = $atableObj->getId();
                                         }
 
