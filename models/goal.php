@@ -60,6 +60,7 @@ class Goal extends AFWObject
                 $module_code = $object_code_arr[1];
                 $jrole_code = $object_code_arr[2];
                 $lang = $object_code_arr[3];
+                $arole_code = $object_code_arr[4];
                 if(!$lang) $lang = "ar";
 
 
@@ -89,7 +90,8 @@ class Goal extends AFWObject
                 if (!$domain_id)
                         throw new AfwRuntimeException("addByCodes : module oject with code $module_code has no domain defined");
                 // AfwAutoLoader::addModule($module_code);
-                // before add new goal we need to create the associated goal by default
+
+                // before add new goal we need to create/find the default associated Jobrole 
                 if(!$jrole_code) $jrole_code = "jr-" . $goal_code;
                 $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
                 if (!$jrObj)
@@ -100,6 +102,20 @@ class Goal extends AFWObject
                         $jrObj->update();
                         $message_arr[] = $jrObj->tm("job role created", $lang)." : ".$jrObj->getDisplay($lang);
                 }
+
+                // before add this goal we need to create/find the default associated Arole 
+                if(!$arole_code) $arole_code = "ar-" . $goal_code;
+                $arObj = Arole::loadByMainIndex($objModule_id, $arole_code, true);
+                if (!$arObj)
+                        throw new AfwRuntimeException("addByCodes : failed to create arole with (module_id=$objModule_id, arole_code=$arole_code)");
+                if ($arObj->is_new) {
+                        $arObj->set("titre_short_en", $object_name_en);
+                        $arObj->set("titre_short", $object_name_ar);
+                        $arObj->update();
+                        $message_arr[] = $arObj->tm("role created", $lang)." : ".$arObj->getDisplay($lang);
+                }
+                
+                // create the goal or update it
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
 
                 if (!$objGoal)
@@ -152,7 +168,7 @@ class Goal extends AFWObject
                 $warning = implode("\n<br>", $warArr);
                 $error = implode("\n<br>", $errArr);
 
-                return [$objGoal, $message, $error, $warning, $jrObj];
+                return [$objGoal, $message, $error, $warning, $jrObj, $arObj];
         }
 
         /**
@@ -459,7 +475,7 @@ class Goal extends AFWObject
                 return array($category_id, $type_id, $code, $name_ar, $name_en, $specification, $childs);
         }
 
-        public function genereConcernedGoals($lang = 'ar', $regen = false, $operation_men = ',1,2,3,')
+        public function genereConcernedGoals($lang = 'ar', $regen = false, $operation_men = ',1,2,3,', $arole_id=0)
         {
                 $this_id = $this->getId();
 
@@ -584,6 +600,8 @@ class Goal extends AFWObject
                                                 $gc->set('application_id', $application_id);
                                         if ($atable_mfk)
                                                 $gc->set('atable_mfk', $atable_mfk);
+
+                                        $gc->set('arole_id', $arole_id);
                                         $gc->set('operation_men', $operation_men);
                                         if ($gc->is_new) {
                                                 $gc->set('comment', 'AUTO-GENERATED');
