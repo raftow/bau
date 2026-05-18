@@ -103,7 +103,7 @@
 
 		'spcount' => array('SHOW' => true,  'SEARCH' => false,  'QEDIT' => false,  'RETRIEVE' => true,  'EDIT' => true,  
 				'TYPE' => 'INT',  'STEP' => 3,  'CAN-BE-SETTED' => true,  'DIRECT_ACCESS' => true,  
-				'CATEGORY' => 'FORMULA',  'PHP_FORMULA' => 'count.itemList',  'SEARCH-BY-ONE' => '',  'DISPLAY' => true,  
+				'CATEGORY' => 'FORMULA',  'PHP_FORMULA' => 'countItems.itemList',  'SEARCH-BY-ONE' => '',  'DISPLAY' => true,  
 				'DISPLAY-UGROUPS' => '',  'EDIT-UGROUPS' => '', 
 				),
 
