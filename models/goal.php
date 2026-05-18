@@ -41,6 +41,7 @@ class Goal extends AFWObject
          * @param string $object_name_ar 
          * @param string $object_title_en 
          * @param string $object_title_ar
+         * @param string $other_settings
          */
         public static function addByCodes(
                 $object_code_arr,
@@ -55,13 +56,18 @@ class Goal extends AFWObject
         ) {
                 if (count($object_code_arr) < 2)
                         throw new AfwRuntimeException('addByCodes : 2 params are needed module and goal code, command given : ' . $all_command . ', array parsed : ' . var_export($object_code_arr, true));
-                $module_code = $object_code_arr[1];
                 $goal_code = $object_code_arr[0];
+                $module_code = $object_code_arr[1];
+                $jrole_code = $object_code_arr[2];
+                $lang = $object_code_arr[3];
+                if(!$lang) $lang = "ar";
 
 
-
-
-                if ((!$object_code_arr[1]) or (!$object_code_arr[0]))
+                $message_arr = [];
+                $warArr = [];
+                $errArr = [];
+                /*
+                if ((!$goal_code) or (!$module_code))
                         UfwUtils::dieWithVar("This is Goal addByCodes on : ", [
                                 'object_code_arr' => $object_code_arr,
                                 'module_code' => $module_code,
@@ -70,7 +76,7 @@ class Goal extends AFWObject
                                 'object_name_ar' => $object_name_ar,
                                 'object_title_en' => $object_title_en,
                                 'object_title_ar' => $object_title_ar,
-                        ]);
+                        ]);*/
 
                 if ((!$module_code) or (!$goal_code))
                         throw new AfwRuntimeException("addByCodes : module and goal codes are needed, command given : $all_command, module=$module_code and goal_code=$goal_code, array parsed : " . var_export($object_code_arr, true));
@@ -84,7 +90,7 @@ class Goal extends AFWObject
                         throw new AfwRuntimeException("addByCodes : module oject with code $module_code has no domain defined");
                 // AfwAutoLoader::addModule($module_code);
                 // before add new goal we need to create the associated goal by default
-                $jrole_code = "jr-" . $goal_code;
+                if(!$jrole_code) $jrole_code = "jr-" . $goal_code;
                 $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
                 if (!$jrObj)
                         throw new AfwRuntimeException("addByCodes : failed to create jobrole with (domain_id=$domain_id, jrole_code=$jrole_code)");
@@ -92,11 +98,12 @@ class Goal extends AFWObject
                         $jrObj->set("titre_short_en", "job role to do " . $object_name_en);
                         $jrObj->set("titre_short", "صلاحية وظيفية لاجل : " . $object_name_ar);
                         $jrObj->update();
+                        $message_arr[] = $jrObj->tm("job role created", $lang)." : ".$jrObj->getDisplay($lang);
                 }
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
 
                 if (!$objGoal)
-                        $message = "Strange Error happened because Goal::loadByMainIndex($objModule_id, $goal_code, true) failed !!";
+                        $message_arr[] = "Strange Error happened because Goal::loadByMainIndex($objModule_id, $goal_code, true) failed !!";
                 else {
                         if ((!$objGoal->is_new) and (!$update_if_exists)) {
                                 throw new AfwRuntimeException('This goal already exists');
@@ -114,7 +121,7 @@ class Goal extends AFWObject
                         // here other_settings is list of tables managed by this goal
                         $arrTableCodes = explode(",", $other_settings);
                         $atable_mfk = ",";
-                        $warArr = [];
+                        
                         foreach ($arrTableCodes as $tableCode) {
                                 $objTable = Atable::loadByMainIndex($objModule_id, $tableCode);
                                 if (!$objTable or (!$objTable->id)) {
@@ -123,14 +130,29 @@ class Goal extends AFWObject
                         }
                         $objGoal->set('atable_mfk', $atable_mfk);
                         $objGoal->commit();
-                        $objGoal->genereConcernedGoals("ar", true, $operation_men = ",1,2,3,4,5,");
-                        $objGoal->resetUserBFs("ar");
+                        list($error, $info) = $objGoal->genereConcernedGoals($lang, true, $operation_men = ",1,2,3,4,5,");
+                        if($error) $errArr[] = "genereConcernedGoals error : ".$error;
+                        if($info) $message_arr[] = $info;
+                        list($error, $info) = $objGoal->resetUserBFs($lang);
+                        if($error) $errArr[] = "resetUserBFs error : ".$error;
+                        if($info) $message_arr[] = $info;
+                        if (count($errArr) > 0) {
+                                $status = $objGoal->tm('bad', $lang);
+                        } else {
+                                $status = $objGoal->tm('well', $lang);
+                        }
 
-                        $message = 'successfully done';
-                        if (count($warArr) > 0) $message .= ' but with warnings : ' . implode("\n<br>", $warArr);
+                        $message_arr[] = $status . ' '.$objGoal->tm('done', $lang);
+                        
+
+                        
                 }
 
-                return [$objGoal, $message];
+                $message = implode("\n<br>", $message_arr);
+                $warning = implode("\n<br>", $warArr);
+                $error = implode("\n<br>", $errArr);
+
+                return [$objGoal, $message, $error, $warning, $jrObj];
         }
 
         /**
@@ -619,6 +641,7 @@ class Goal extends AFWObject
 
                 return array($error, $info);
         }
+
 
         public function resetUserBFs($lang = 'ar')
         {
