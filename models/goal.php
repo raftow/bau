@@ -146,7 +146,7 @@ class Goal extends AFWObject
                         }
                         $objGoal->set('atable_mfk', $atable_mfk);
                         $objGoal->commit();
-                        list($error, $info) = $objGoal->genereConcernedGoals($lang, true, $operation_men = ",1,2,3,4,5,");
+                        list($error, $info) = $objGoal->genereConcernedGoals($lang, true, $operation_men = ",1,2,3,4,5,", $arObj->id);
                         if($error) $errArr[] = "genereConcernedGoals error : ".$error;
                         if($info) $message_arr[] = $info;
                         list($error, $info) = $objGoal->resetUserBFs($lang);
@@ -592,7 +592,7 @@ class Goal extends AFWObject
 
                                         foreach ($atableList as $atableObj) {
                                                 $jrList = $atableObj->getEntityManagerJobroles();
-                                                if ($jrList[$jobrole_id]or true)
+                                                if ($jrList[$jobrole_id] or true) // i added [or true] be I dont understand
                                                         $atable_id_arr[] = $atableObj->getId();
                                         }
 
