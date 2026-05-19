@@ -104,7 +104,7 @@ class Goal extends AFWObject
                 }
 
                 // before add this goal we need to create/find the default associated Arole 
-                if(!$arole_code) $arole_code = "ar-" . $goal_code;
+                if(!$arole_code) $arole_code = "goal-" . $goal_code;
                 $arObj = Arole::loadByMainIndex($objModule_id, $arole_code, true);
                 if (!$arObj)
                         throw new AfwRuntimeException("addByCodes : failed to create arole with (module_id=$objModule_id, arole_code=$arole_code)");
@@ -163,6 +163,12 @@ class Goal extends AFWObject
 
                         
                 }
+
+                $superAdmin = Auser::loadById(1);
+                $superAdmin->giveMeModule($objModule_id,[$arObj->id]);
+                list($error, $info) = $superAdmin->generateCacheFile($lang);
+                if($error) $errArr[] = "generateCacheFile error : ".$error;
+                if($info) $message_arr[] = $info;
 
                 $message = implode("\n<br>", $message_arr);
                 $warning = implode("\n<br>", $warArr);
