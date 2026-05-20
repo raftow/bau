@@ -95,6 +95,9 @@ class Goal extends AFWObject
                 // before add new goal we need to create/find the default associated Jobrole 
                 if(!$jrole_code) $jrole_code = "jr-" . $goal_code;
                 $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
+                list($error, $info) = $jrObj->createArolesFromGoals($lang);
+                if($error) $errArr[] = "createArolesFromGoals error : ".$error;
+                if($info) $message_arr[] = $info;
                 if (!$jrObj)
                         throw new AfwRuntimeException("addByCodes : failed to create jobrole with (domain_id=$domain_id, jrole_code=$jrole_code)");
                 if ($jrObj->is_new or $update_if_exists) {
