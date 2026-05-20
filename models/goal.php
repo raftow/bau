@@ -123,7 +123,7 @@ class Goal extends AFWObject
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
 
                 if (!$objGoal)
-                        $message_arr[] = "Strange Error happened because Goal::loadByMainIndex($objModule_id, $goal_code, true) failed !!";
+                        $message_arr[] = "Strange Error happened because Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true) failed !!";
                 else {
                         if ((!$objGoal->is_new) and (!$update_if_exists)) {
                                 throw new AfwRuntimeException('This goal already exists');
