@@ -485,6 +485,14 @@ class Goal extends AFWObject
                 return array($category_id, $type_id, $code, $name_ar, $name_en, $specification, $childs);
         }
 
+        /**
+         * @param int $atable_id
+         */
+        public function tableIsManaged($atable_id) {
+                $atable_mfk = $this->getVal('atable_mfk');
+                return AfwStringHelper::stringContain($atable_mfk, ",$atable_id,");
+        }
+
         public function genereConcernedGoals($lang = 'ar', $regen = false, $operation_men = ',1,2,3,', $arole_id=0)
         {
                 $this_id = $this->getId();
