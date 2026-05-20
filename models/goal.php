@@ -61,6 +61,7 @@ class Goal extends AFWObject
                 $jrole_code = $object_code_arr[2];
                 $lang = $object_code_arr[3];
                 $arole_code = $object_code_arr[4];
+                // $xxxx = $object_code_arr[5];
                 if(!$lang) $lang = "ar";
 
 
@@ -96,9 +97,9 @@ class Goal extends AFWObject
                 $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
                 if (!$jrObj)
                         throw new AfwRuntimeException("addByCodes : failed to create jobrole with (domain_id=$domain_id, jrole_code=$jrole_code)");
-                if ($jrObj->is_new) {
-                        $jrObj->set("titre_short_en", "job role to do " . $object_name_en);
-                        $jrObj->set("titre_short", "صلاحية وظيفية لاجل : " . $object_name_ar);
+                if ($jrObj->is_new or $update_if_exists) {
+                        $jrObj->set("titre_short_en", $object_name_en); // "job role to do " . 
+                        $jrObj->set("titre_short", $object_name_ar); // "صلاحية وظيفية لاجل : " . 
                         $jrObj->update();
                         $message_arr[] = $jrObj->tm("job role created", $lang)." : ".$jrObj->getDisplay($lang);
                 }
@@ -108,7 +109,7 @@ class Goal extends AFWObject
                 $arObj = Arole::loadByMainIndex($objModule_id, $arole_code, true);
                 if (!$arObj)
                         throw new AfwRuntimeException("addByCodes : failed to create arole with (module_id=$objModule_id, arole_code=$arole_code)");
-                if ($arObj->is_new) {
+                if ($arObj->is_new or $update_if_exists) {
                         $arObj->set("titre_short_en", $object_name_en);
                         $arObj->set("titre_short", $object_name_ar);
                         $arObj->update();
