@@ -61,8 +61,9 @@ class Goal extends AFWObject
                 $jrole_code = $object_code_arr[2];
                 $lang = $object_code_arr[3];
                 $arole_code = $object_code_arr[4];
-                // $xxxx = $object_code_arr[5];
-                if(!$lang) $lang = "ar";
+                $hlSettings = $object_code_arr[5];
+                if (!$hlSettings) $hlSettings = [];
+                if (!$lang) $lang = "ar";
 
 
                 $message_arr = [];
@@ -93,22 +94,22 @@ class Goal extends AFWObject
                 // AfwAutoLoader::addModule($module_code);
 
                 // before add new goal we need to create/find the default associated Jobrole 
-                if(!$jrole_code) $jrole_code = "jr-" . $goal_code;
+                if (!$jrole_code) $jrole_code = "jr-" . $goal_code;
                 $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
                 list($error, $info) = $jrObj->createArolesFromGoals($lang);
-                if($error) $errArr[] = "createArolesFromGoals error : ".$error;
-                if($info) $message_arr[] = $info;
+                if ($error) $errArr[] = "createArolesFromGoals error : " . $error;
+                if ($info) $message_arr[] = $info;
                 if (!$jrObj)
                         throw new AfwRuntimeException("addByCodes : failed to create jobrole with (domain_id=$domain_id, jrole_code=$jrole_code)");
                 if ($jrObj->is_new or $update_if_exists) {
                         $jrObj->set("titre_short_en", $object_name_en); // "job role to do " . 
                         $jrObj->set("titre_short", $object_name_ar); // "صلاحية وظيفية لاجل : " . 
                         $jrObj->update();
-                        $message_arr[] = $jrObj->tm("job role created", $lang)." : ".$jrObj->getDisplay($lang);
+                        $message_arr[] = $jrObj->tm("job role created", $lang) . " : " . $jrObj->getDisplay($lang);
                 }
 
                 // before add this goal we need to create/find the default associated Arole 
-                if(!$arole_code) $arole_code = "goal-" . $goal_code;
+                if (!$arole_code) $arole_code = "goal-" . $goal_code;
                 $arObj = Arole::loadByMainIndex($objModule_id, $arole_code, true);
                 if (!$arObj)
                         throw new AfwRuntimeException("addByCodes : failed to create arole with (module_id=$objModule_id, arole_code=$arole_code)");
@@ -116,7 +117,7 @@ class Goal extends AFWObject
                         $arObj->set("titre_short_en", $object_name_en);
                         $arObj->set("titre_short", $object_name_ar);
                         $arObj->update();
-                        $message_arr[] = $arObj->tm("role created", $lang)." : ".$arObj->getDisplay($lang);
+                        $message_arr[] = $arObj->tm("role created", $lang) . " : " . $arObj->getDisplay($lang);
                 }
 
                 // create the goal or update it
@@ -141,7 +142,7 @@ class Goal extends AFWObject
                         // here other_settings is list of tables managed by this goal
                         $arrTableCodes = explode(",", $other_settings);
                         $atable_mfk = ",";
-                        
+
                         foreach ($arrTableCodes as $tableCode) {
                                 $objTable = Atable::loadByMainIndex($objModule_id, $tableCode);
                                 if (!$objTable or (!$objTable->id)) {
@@ -151,28 +152,25 @@ class Goal extends AFWObject
                         $objGoal->set('atable_mfk', $atable_mfk);
                         $objGoal->commit();
                         list($error, $info) = $objGoal->genereConcernedGoals($lang, true, $operation_men = ",1,2,3,4,5,", $arObj->id);
-                        if($error) $errArr[] = "genereConcernedGoals error : ".$error;
-                        if($info) $message_arr[] = $info;
-                        list($error, $info) = $objGoal->resetUserBFs($lang);
-                        if($error) $errArr[] = "resetUserBFs error : ".$error;
-                        if($info) $message_arr[] = $info;
+                        if ($error) $errArr[] = "genereConcernedGoals error : " . $error;
+                        if ($info) $message_arr[] = $info;
+                        list($error, $info) = $objGoal->resetUserBFs($lang, $hlSettings);
+                        if ($error) $errArr[] = "resetUserBFs error : " . $error;
+                        if ($info) $message_arr[] = $info;
                         if (count($errArr) > 0) {
                                 $status = $objGoal->tm('bad', $lang);
                         } else {
                                 $status = $objGoal->tm('well', $lang);
                         }
 
-                        $message_arr[] = $status . ' '.$objGoal->tm('done', $lang);
-                        
-
-                        
+                        $message_arr[] = $status . ' ' . $objGoal->tm('done', $lang);
                 }
 
                 $superAdmin = Auser::loadById(1);
-                $superAdmin->giveMeModule($objModule_id,[$arObj->id]);
+                $superAdmin->giveMeModule($objModule_id, [$arObj->id]);
                 list($error, $info) = $superAdmin->generateCacheFile($lang);
-                if($error) $errArr[] = "generateCacheFile error : ".$error;
-                if($info) $message_arr[] = $info;
+                if ($error) $errArr[] = "generateCacheFile error : " . $error;
+                if ($info) $message_arr[] = $info;
 
                 $message = implode("\n<br>", $message_arr);
                 $warning = implode("\n<br>", $warArr);
@@ -488,12 +486,13 @@ class Goal extends AFWObject
         /**
          * @param int $atable_id
          */
-        public function tableIsManaged($atable_id) {
+        public function tableIsManaged($atable_id)
+        {
                 $atable_mfk = $this->getVal('atable_mfk');
                 return AfwStringHelper::stringContain($atable_mfk, ",$atable_id,");
         }
 
-        public function genereConcernedGoals($lang = 'ar', $regen = false, $operation_men = ',1,2,3,', $arole_id=0)
+        public function genereConcernedGoals($lang = 'ar', $regen = false, $operation_men = ',1,2,3,', $arole_id = 0)
         {
                 $this_id = $this->getId();
 
@@ -683,7 +682,7 @@ class Goal extends AFWObject
         }
 
 
-        public function resetUserBFs($lang = 'ar')
+        public function resetUserBFs($lang = 'ar', $hlSettings = [])
         {
                 UfwQueryAnalyzer::startProcessLourdMode();
 
@@ -693,12 +692,14 @@ class Goal extends AFWObject
                 $atList = $this->get('atable_mfk');
                 /** @var Atable $atableItem */
                 foreach ($atList as $atableItem) {
-                        $atableItemDisp = $atableItem->getVal('atable_name');
-                        list($err, $inf) = $atableItem->genereUserBFs($lang);
+                        $atable_name = $atableItem->getVal('atable_name');
+                        $hierarchy_level_enum = $hlSettings[$atable_name];
+                        if (!$hierarchy_level_enum) $hierarchy_level_enum = 1;
+                        list($err, $inf) = $atableItem->genereUserBFs($lang, $hierarchy_level_enum);
                         if ($err)
-                                $error .= "for table $atableItemDisp : genereUserBFs returned this error : $err \n<br>\n";
+                                $error .= "for table $atable_name : genereUserBFs returned this error : $err \n<br>\n";
                         if ($inf)
-                                $info .= "for table $atableItemDisp :  genereUserBFs returned This info : $inf \n<br>\n";
+                                $info .= "for table $atable_name :  genereUserBFs returned This info : $inf \n<br>\n";
                 }
                 UfwQueryAnalyzer::stopProcessLourdMode();
                 return array($error, $info);
