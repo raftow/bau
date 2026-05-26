@@ -140,14 +140,19 @@ class Goal extends AFWObject
 
                         $objGoal->set('jobrole_id', $jrObj->id);
                         // here other_settings is list of tables managed by this goal
+                        $other_settings = trim($other_settings);
+                        $other_settings = trim($other_settings, ",");
                         $arrTableCodes = explode(",", $other_settings);
                         $atable_mfk = ",";
 
                         foreach ($arrTableCodes as $tableCode) {
-                                $objTable = Atable::loadByMainIndex($objModule_id, $tableCode);
-                                if (!$objTable or (!$objTable->id)) {
-                                        $warArr[] = "table $tableCode not found in module $module_code";
-                                } else $atable_mfk .= $objTable->id . ",";
+                                $tableCode = trim($tableCode);
+                                if ($tableCode) {
+                                        $objTable = Atable::loadByMainIndex($objModule_id, $tableCode);
+                                        if (!$objTable or (!$objTable->id)) {
+                                                $warArr[] = "table [$tableCode] not found in module $module_code";
+                                        } else $atable_mfk .= $objTable->id . ",";
+                                }
                         }
                         $objGoal->set('atable_mfk', $atable_mfk);
                         $objGoal->commit();
