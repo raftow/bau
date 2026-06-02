@@ -73,13 +73,13 @@ class UserStory extends AFWObject
         {
                 $obj = new UserStory();
                 if (!$system_id)
-                        $obj->simpleError('loadByMainIndex : system_id is mandatory field');
+                        throw new AfwRuntimeException('loadByMainIndex : system_id is mandatory field');
                 if (!$module_id)
-                        $obj->simpleError('loadByMainIndex : module_id is mandatory field');
+                        throw new AfwRuntimeException('loadByMainIndex : module_id is mandatory field');
                 if (!$jobrole_id)
-                        $obj->simpleError('loadByMainIndex : jobrole_id is mandatory field');
+                        throw new AfwRuntimeException('loadByMainIndex : jobrole_id is mandatory field');
                 if (!$bfunction_id)
-                        $obj->simpleError('loadByMainIndex : bfunction_id is mandatory field');
+                        throw new AfwRuntimeException('loadByMainIndex : bfunction_id is mandatory field');
 
                 $obj->select('system_id', $system_id);
                 $obj->select('module_id', $module_id);
