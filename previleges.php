@@ -1239,7 +1239,7 @@
   ),
   183 => 
   array (
-    'code' => 'bau-lookup',
+    'code' => 'bau-lookups',
     'name' => 
     array (
       'ar' => 'البيانات المرجعية',
