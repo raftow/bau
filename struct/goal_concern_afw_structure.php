@@ -14,8 +14,8 @@ class BauGoalConcernAfwStructure
 			// $obj->AUDIT_DATA = true;
 
 			$obj->UNIQUE_KEY = array('goal_id', 'jobrole_id');
-			$obj->editByStep = false;
-			$obj->editNbSteps = 0;
+			$obj->editByStep = true;
+			$obj->editNbSteps = 2;
 			$obj->showQeditErrors = true;
 			$obj->showRetrieveErrors = true;
 			$obj->general_check_errors = true;
