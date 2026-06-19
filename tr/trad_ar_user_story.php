@@ -15,7 +15,7 @@
 	$trad["user_story"]["user_story_desc_ar"] = "وصف قصة المستخدم";
 	$trad["user_story"]["user_story_desc_en"] = "وصف قصة المستخدم بالانجليزي";
 	$trad["user_story"]["my_goal_id"] = "قصة المستخدم نفسها كهدف";
-        $trad["user_story"]["arole_id"] = "الصلاحية المستخدمة";
+        $trad["user_story"]["arole_id"] = "مجموعة الوظائف المستخدمة";
 	$trad["user_story"]["source"] = "مصدر القرار";
         $trad["user_story"]["comments"] = "ملاحظات"; 
         
