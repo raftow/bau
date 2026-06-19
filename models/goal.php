@@ -139,6 +139,9 @@ class Goal extends AFWObject
 
                 // before add this goal we need to create/find the default associated Arole 
                 if (!$arole_code) $arole_code = "goal-" . $goal_code;
+                /**
+                 * @var Arole $arObj
+                 */
                 $arObj = Arole::loadByMainIndex($objModule_id, $arole_code, true);
                 if (!$arObj)
                         throw new AfwRuntimeException("addByCodes : failed to create arole with (module_id=$objModule_id, arole_code=$arole_code)");
@@ -147,6 +150,13 @@ class Goal extends AFWObject
                         $arObj->set("titre_short", $object_name_ar);
                         $arObj->update();
                         $message_arr[] = $arObj->tm("role created", $lang) . " : " . $arObj->getDisplay($lang);
+                }
+
+                if ($arObj and !$arObj->is_new) {
+                        // when the role already exists reset it
+                        $rid = $arObj->id;
+                        $server_db_prefix = AfwSession::config('db_prefix', 'default_db_');
+                        $arObj->execQuery("delete from ${server_db_prefix}ums.arole_bf where arole_id = '$rid' ");
                 }
 
                 // create the goal or update it
