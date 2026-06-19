@@ -106,7 +106,7 @@ class Goal extends AFWObject
 
                 $jrObj = self::genereJobroleForGoal($domain_id, $goal_code, $jrole_code, $goal_name_ar, $goal_name_en, $update_if_exists, $lang, true);
 
-                return self::genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $jrObj->id, $update_if_exists, $lang);
+                return self::genereAroleForGoal($objModule_id, $goal_code, "", $goal_name_ar, $goal_name_en, $jrObj->id, $update_if_exists, $lang);
         }
 
         /**
@@ -149,17 +149,18 @@ class Goal extends AFWObject
         /**
          * @param int $objModule_id
          * @param string $goal_code
+         * @param string $arole_code
          * @param string $goal_name_ar
          * @param string $goal_name_en
          * @param int $jobrole_id
          */
-        public static function genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $jobrole_id, $update_if_exists = false, $lang = "ar", $returnRole = false)
+        public static function genereAroleForGoal($objModule_id, $goal_code, $arole_code, $goal_name_ar, $goal_name_en, $jobrole_id, $update_if_exists = false, $lang = "ar", $returnRole = false)
         {
                 $errors_arr = [];
                 $infos_arr = [];
                 $wars_arr = [];
 
-                $arole_code = "goal-" . $goal_code;
+                if (!$arole_code) $arole_code = "goal-" . $goal_code;
 
                 if (!$jobrole_id) {
                         $wars_arr[] = self::transMess("role will not be linked to its job, because jobrole id not defined", $lang);
@@ -267,7 +268,7 @@ class Goal extends AFWObject
                 $jrObj = self::genereJobroleForGoal($domain_id, $goal_code, $jrole_code, $object_name_ar, $object_name_en, $update_if_exists, $lang, true);
 
                 // before add this goal we need to create/find the default associated Arole 
-                $arObj = self::genereAroleForGoal($objModule_id, $goal_code, $object_name_ar, $object_name_en, $jrObj->id, $update_if_exists, $lang, true);
+                $arObj = self::genereAroleForGoal($objModule_id, $goal_code, $arole_code, $object_name_ar, $object_name_en, $jrObj->id, $update_if_exists, $lang, true);
 
                 // create the goal or update it
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
