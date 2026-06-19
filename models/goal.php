@@ -36,6 +36,35 @@ class Goal extends AFWObject
         }
 
         /**
+         * @var Module $objModule
+         */
+
+        public function refreshMyRelatedObjectsAndInfos($objModule)
+        {
+                if (!$objModule or (!$objModule->id))
+                        throw new AfwRuntimeException("refreshMyRelatedObjects : module oject is required");
+                $objModule_id = $objModule->id;
+                $system_id = $objModule->getVal("id_system");
+                $domain_id = $objModule->getVal("id_pm");
+                if (!$domain_id)
+                        throw new AfwRuntimeException("addByCodes : module oject given has no domain defined");
+                // AfwAutoLoader::addModule($module_code);
+                $goal_code = $this->getVal('goal_code');
+                $object_name_en = $this->getVal('goal_name_en');
+                $object_name_ar = $this->getVal('goal_name_ar');
+                $object_title_en = $this->getVal('goal_desc_en');
+                $object_title_ar = $this->getVal('goal_desc_ar');
+                // before add new goal we need to create/find the default associated Jobrole 
+                $jrole_code = "jr-" . $goal_code;
+                $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
+                if ($jrObj->is_new) {
+                        $jrObj->set("titre_short_en", $object_name_en); // "job role to do " . 
+                        $jrObj->set("titre_short", $object_name_ar); // "صلاحية وظيفية لاجل : " . 
+                        $jrObj->update();
+                }
+        }
+
+        /**
          * @param array $object_code_arr 
          * @param string $object_name_en 
          * @param string $object_name_ar 
