@@ -161,6 +161,10 @@ class Goal extends AFWObject
 
                 $arole_code = "goal-" . $goal_code;
 
+                if (!$jobrole_id) {
+                        $wars_arr[] = self::transMess("role will not be linked to its job, because jobrole id not defined", $lang);
+                }
+
                 /**
                  * @var Arole $arObj
                  */
@@ -185,13 +189,13 @@ class Goal extends AFWObject
                         $arObj->execQuery("delete from ${server_db_prefix}ums.arole_bf where arole_id = '$rid' ");
                         $infos_arr[] = $arObj->tm("role BFs reset done", $lang);
                 }
-                if ($arObj) {
+                if ($arObj and $jobrole_id) {
                         $arole_id = $arObj->id;
                         $jar = JobArole::loadByMainIndex($jobrole_id, $objModule_id, $arole_id, true);
                         if (!$jar) {
-                                $errors_arr[] = self::transMess("failed to create JobArole ", $lang) . " : $arole_code";
+                                $errors_arr[] = self::transMess("failed to create JobArole for jobrole", $lang) . " : $jobrole_id";
                         } else {
-                                $infos_arr[] = $arObj->tm("JobArole created/updated", $lang);
+                                $infos_arr[] = $arObj->tm("JobArole created/updated for jobrole", $lang) . " : $jobrole_id";
                         }
                 }
 
