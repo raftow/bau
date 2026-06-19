@@ -35,12 +35,28 @@ class Goal extends AFWObject
                 BauGoalAfwStructure::initInstance($this);
         }
 
+        public function genereMyRelatedObjectsAndInfos($lang = "ar")
+        {
+                /** 
+                 * @var Domain $domainObj
+                 * */
+                $domainObj = $this->het('domain_id');
+                if (!$domainObj) return ["No domain defined for this goal"];
+                $mainApp = $domainObj->calcMainApplication();
+                if (!$mainApp) return ["No main Application defined for this domain : " . $domainObj->getShortDisplay($lang)];
+                return $this->refreshMyRelatedObjectsAndInfos($mainApp, $lang);
+        }
+
+
         /**
-         * @var Module $objModule
+         * @param Module $objModule
          */
 
-        public function refreshMyRelatedObjectsAndInfos($objModule)
+        public function refreshMyRelatedObjectsAndInfos($objModule, $lang = "ar")
         {
+                $errors_arr = [];
+                $infos_arr = [];
+                $wars_arr = [];
                 if (!$objModule or (!$objModule->id))
                         throw new AfwRuntimeException("refreshMyRelatedObjects : module oject is required");
                 $objModule_id = $objModule->id;
@@ -61,7 +77,77 @@ class Goal extends AFWObject
                         $jrObj->set("titre_short_en", $object_name_en); // "job role to do " . 
                         $jrObj->set("titre_short", $object_name_ar); // "صلاحية وظيفية لاجل : " . 
                         $jrObj->update();
+                        $infos_arr[] = $this->tm("Job role has been created", $lang);
+                } else {
+                        $wars_arr[] = $this->tm("Job role already exists", $lang);
                 }
+
+                list($err, $inf, $war) = $this->genereMyArole($objModule, $update_if_exists = true, $lang);
+
+                if ($err) $errors_arr[] = $err;
+                if ($inf) $infos_arr[] = $inf;
+                if ($war) $wars_arr[] = $war;
+
+                return AfwFormatHelper::pbm_result($errors_arr, $infos_arr, $wars_arr);
+        }
+
+
+        /**
+         * @param Module $objModule
+         */
+        public function genereMyArole($objModule, $update_if_exists = false, $lang = "ar")
+        {
+                $goal_name_en = $this->getVal('goal_name_en');
+                $goal_name_ar = $this->getVal('goal_name_ar');
+                $goal_code = $this->getVal('goal_code');
+                $objModule_id = $objModule->id;
+
+                return self::genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $update_if_exists, $lang);
+        }
+
+        /**
+         * @param int $objModule_id
+         * @param string $goal_code
+         * @param string $goal_name_ar
+         * @param string $goal_name_en
+         * 
+         */
+        public static function genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $update_if_exists = false, $lang = "ar", $returnRole = false)
+        {
+                $errors_arr = [];
+                $infos_arr = [];
+                $wars_arr = [];
+
+                $arole_code = "goal-" . $goal_code;
+
+                /**
+                 * @var Arole $arObj
+                 */
+                $arObj = Arole::loadByMainIndex($objModule_id, $arole_code, true);
+                if (!$arObj) {
+                        $errors_arr[] = self::transMess("failed to create role", $lang) . " : $arole_code";
+                }
+
+                if ($arObj->is_new or $update_if_exists) {
+                        $arObj->set("titre_short_en", $goal_name_en);
+                        $arObj->set("titre_short", $goal_name_ar);
+                        $arObj->update();
+                        $infos_arr[] = $arObj->tm("role created/updated", $lang) . " : " . $arObj->getDisplay($lang);
+                } else {
+                        $wars_arr[] = $arObj->tm("role already exists", $lang) . " : " . $arObj->getDisplay($lang);
+                }
+
+                if ($arObj and !$arObj->is_new) {
+                        // when the role already exists reset it
+                        $rid = $arObj->id;
+                        $server_db_prefix = AfwSession::config('db_prefix', 'default_db_');
+                        $arObj->execQuery("delete from ${server_db_prefix}ums.arole_bf where arole_id = '$rid' ");
+                        $infos_arr[] = $arObj->tm("role BFs reset done", $lang);
+                }
+
+                if ($returnRole) return $arObj;
+
+                return AfwFormatHelper::pbm_result($errors_arr, $infos_arr, $wars_arr);
         }
 
         /**
@@ -138,26 +224,7 @@ class Goal extends AFWObject
                 }
 
                 // before add this goal we need to create/find the default associated Arole 
-                if (!$arole_code) $arole_code = "goal-" . $goal_code;
-                /**
-                 * @var Arole $arObj
-                 */
-                $arObj = Arole::loadByMainIndex($objModule_id, $arole_code, true);
-                if (!$arObj)
-                        throw new AfwRuntimeException("addByCodes : failed to create arole with (module_id=$objModule_id, arole_code=$arole_code)");
-                if ($arObj->is_new or $update_if_exists) {
-                        $arObj->set("titre_short_en", $object_name_en);
-                        $arObj->set("titre_short", $object_name_ar);
-                        $arObj->update();
-                        $message_arr[] = $arObj->tm("role created", $lang) . " : " . $arObj->getDisplay($lang);
-                }
-
-                if ($arObj and !$arObj->is_new) {
-                        // when the role already exists reset it
-                        $rid = $arObj->id;
-                        $server_db_prefix = AfwSession::config('db_prefix', 'default_db_');
-                        $arObj->execQuery("delete from ${server_db_prefix}ums.arole_bf where arole_id = '$rid' ");
-                }
+                $arObj = self::genereAroleForGoal($objModule_id, $goal_code, $object_name_ar, $object_name_en, $update_if_exists, $lang, true);
 
                 // create the goal or update it
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
@@ -699,6 +766,11 @@ class Goal extends AFWObject
                 $color = 'red';
                 $title_ar = 'مسح القصص';
                 $pbms['xh01Aa'] = array('METHOD' => 'deleteUserStories', 'COLOR' => $color, 'LABEL_AR' => $title_ar, 'ADMIN-ONLY' => true, 'BF-ID' => '');
+
+                $color = 'green';
+                $title_ar = 'تحديث الكيانات المرتبطة';
+                $pbms['yh02bV'] = array('METHOD' => 'genereMyRelatedObjectsAndInfos', 'COLOR' => $color, 'LABEL_AR' => $title_ar, 'ADMIN-ONLY' => true, 'BF-ID' => '');
+
 
                 return $pbms;
         }
