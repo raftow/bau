@@ -151,7 +151,7 @@ class Goal extends AFWObject
          * @param string $goal_code
          * @param string $goal_name_ar
          * @param string $goal_name_en
-         * 
+         * @param int $jobrole_id
          */
         public static function genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $jobrole_id, $update_if_exists = false, $lang = "ar", $returnRole = false)
         {
@@ -185,8 +185,16 @@ class Goal extends AFWObject
                         $arObj->execQuery("delete from ${server_db_prefix}ums.arole_bf where arole_id = '$rid' ");
                         $infos_arr[] = $arObj->tm("role BFs reset done", $lang);
                 }
+                if ($arObj) {
+                        $arole_id = $arObj->id;
+                        $jar = JobArole::loadByMainIndex($jobrole_id, $objModule_id, $arole_id, true);
+                        if (!$jar) {
+                                $errors_arr[] = self::transMess("failed to create JobArole ", $lang) . " : $arole_code";
+                        } else {
+                                $infos_arr[] = $arObj->tm("JobArole created/updated", $lang);
+                        }
+                }
 
-                JobArole::loadByMainIndex($jobrole_id, $objModule_id, $arObj->id, true);
 
                 if ($returnRole) return $arObj;
 
