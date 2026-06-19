@@ -101,8 +101,49 @@ class Goal extends AFWObject
                 $goal_name_ar = $this->getVal('goal_name_ar');
                 $goal_code = $this->getVal('goal_code');
                 $objModule_id = $objModule->id;
+                $domain_id = $objModule->getVal("id_pm");
+                $jrole_code = "jr-" . $goal_code;
 
-                return self::genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $update_if_exists, $lang);
+                $jrObj = self::genereJobroleForGoal($domain_id, $goal_code, $jrole_code, $goal_name_ar, $goal_name_en, $update_if_exists, $lang, true);
+
+                return self::genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $jrObj->id, $update_if_exists, $lang);
+        }
+
+        /**
+         * @param int $domain_id
+         * @param string $goal_code
+         * @param string $jrole_code
+         * @param string $jrole_name_en
+         * @param string $jrole_name_ar
+         * 
+         */
+
+        public static function genereJobroleForGoal($domain_id, $goal_code, $jrole_code, $jrole_name_ar, $jrole_name_en, $update_if_exists = false, $lang = "ar", $returnJobrole = false)
+        {
+                $errors_arr = [];
+                $infos_arr = [];
+                $wars_arr = [];
+
+                if (!$jrole_code) $jrole_code = "jr-" . $goal_code;
+                $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
+                if (!$jrObj)
+                        $errors_arr[] = "failed to create jobrole with (domain_id=$domain_id, jrole_code=$jrole_code)";
+                else {
+                        list($error, $info, $war) = $jrObj->createArolesFromGoals($lang);
+                        if ($error) $errors_arr[] = "createArolesFromGoals error : " . $error;
+                        if ($info) $infos_arr[] = $info;
+                        if ($war) $wars_arr[] = $war;
+                        if ($jrObj->is_new or $update_if_exists) {
+                                $jrObj->set("titre_short_en", $jrole_name_ar); // "job role to do " . 
+                                $jrObj->set("titre_short", $jrole_name_en); // "صلاحية وظيفية لاجل : " . 
+                                $jrObj->update();
+                                $infos_arr[] = $jrObj->tm("job role created", $lang) . " : " . $jrObj->getDisplay($lang);
+                        }
+                }
+
+                if ($returnJobrole) return $jrObj;
+
+                return AfwFormatHelper::pbm_result($errors_arr, $infos_arr, $wars_arr);
         }
 
         /**
@@ -112,7 +153,7 @@ class Goal extends AFWObject
          * @param string $goal_name_en
          * 
          */
-        public static function genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $update_if_exists = false, $lang = "ar", $returnRole = false)
+        public static function genereAroleForGoal($objModule_id, $goal_code, $goal_name_ar, $goal_name_en, $jobrole_id, $update_if_exists = false, $lang = "ar", $returnRole = false)
         {
                 $errors_arr = [];
                 $infos_arr = [];
@@ -144,6 +185,8 @@ class Goal extends AFWObject
                         $arObj->execQuery("delete from ${server_db_prefix}ums.arole_bf where arole_id = '$rid' ");
                         $infos_arr[] = $arObj->tm("role BFs reset done", $lang);
                 }
+
+                JobArole::loadByMainIndex($jobrole_id, $objModule_id, $arObj->id, true);
 
                 if ($returnRole) return $arObj;
 
@@ -209,22 +252,10 @@ class Goal extends AFWObject
                 // AfwAutoLoader::addModule($module_code);
 
                 // before add new goal we need to create/find the default associated Jobrole 
-                if (!$jrole_code) $jrole_code = "jr-" . $goal_code;
-                $jrObj = Jobrole::loadByMainIndex($domain_id, $jrole_code, true);
-                list($error, $info) = $jrObj->createArolesFromGoals($lang);
-                if ($error) $errArr[] = "createArolesFromGoals error : " . $error;
-                if ($info) $message_arr[] = $info;
-                if (!$jrObj)
-                        throw new AfwRuntimeException("addByCodes : failed to create jobrole with (domain_id=$domain_id, jrole_code=$jrole_code)");
-                if ($jrObj->is_new or $update_if_exists) {
-                        $jrObj->set("titre_short_en", $object_name_en); // "job role to do " . 
-                        $jrObj->set("titre_short", $object_name_ar); // "صلاحية وظيفية لاجل : " . 
-                        $jrObj->update();
-                        $message_arr[] = $jrObj->tm("job role created", $lang) . " : " . $jrObj->getDisplay($lang);
-                }
+                $jrObj = self::genereJobroleForGoal($domain_id, $goal_code, $jrole_code, $object_name_ar, $object_name_en, $update_if_exists, $lang, true);
 
                 // before add this goal we need to create/find the default associated Arole 
-                $arObj = self::genereAroleForGoal($objModule_id, $goal_code, $object_name_ar, $object_name_en, $update_if_exists, $lang, true);
+                $arObj = self::genereAroleForGoal($objModule_id, $goal_code, $object_name_ar, $object_name_en, $jrObj->id, $update_if_exists, $lang, true);
 
                 // create the goal or update it
                 $objGoal = Goal::loadByMainIndex($system_id, $objModule_id, $goal_code, true);
