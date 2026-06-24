@@ -854,7 +854,7 @@ class Goal extends AFWObject
                 foreach ($atList as $atableItem) {
                         $atable_name = $atableItem->getVal('atable_name');
                         $hierarchy_level_enum = $hlSettings[$atable_name];
-                        if (!$hierarchy_level_enum) $hierarchy_level_enum = 0;
+                        if (!$hierarchy_level_enum) $hierarchy_level_enum = 999;
                         list($err, $inf) = $atableItem->genereUserBFs($lang, $hierarchy_level_enum);
                         if ($err)
                                 $error .= "for table $atable_name : genereUserBFs returned this error : $err \n<br>\n";
