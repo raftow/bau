@@ -109,6 +109,7 @@ class Goal extends AFWObject
                 return self::genereAroleForGoal($objModule_id, $goal_code, "", $goal_name_ar, $goal_name_en, $jrObj->id, $update_if_exists, $lang);
         }
 
+
         /**
          * @param int $domain_id
          * @param string $goal_code
