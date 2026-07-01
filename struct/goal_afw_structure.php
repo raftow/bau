@@ -421,6 +421,7 @@ class BauGoalAfwStructure
 			'BUTTONS' => true,
 			'NO-LABEL' => false,
 			'MANDATORY' => true,
+			'PILLAR' => true,
 			'SEARCH-BY-ONE' => '',
 			'DISPLAY' => true,
 			'DISPLAY-UGROUPS' => '',
