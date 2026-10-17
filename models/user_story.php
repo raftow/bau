@@ -300,7 +300,7 @@ class UserStory extends AFWObject
 
                                 if ($goal_id) {
                                         $this->goal_decision = $goal_decision;
-                                        // if($this->getId()==536)  $this->_error("this->goal_decision = ".$this->goal_decision);
+                                        // if($this->getId()==536)  throw new AfwRuntimeException("this->goal_decision = ".$this->goal_decision);
                                         $info = $goal_decision;
                                         $err = '';
                                 } else {

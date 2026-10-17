@@ -239,10 +239,10 @@ class RAMObject extends AFWObject
      public static function loadByMainIndex($parent_object_pk, $object_category_enm, $object_type_id, $object_code, $create_obj_if_not_found = false)
      {
           $obj = new RAMObject();
-          if (!$parent_object_pk) $obj->_error("loadByMainIndex : parent_object_pk is mandatory field");
-          if (!$object_category_enm) $obj->_error("loadByMainIndex : object_category_enm is mandatory field");
-          if (!$object_type_id) $obj->_error("loadByMainIndex : object_type_id is mandatory field");
-          if (!$object_code) $obj->_error("loadByMainIndex : object_code is mandatory field");
+          if (!$parent_object_pk) throw new AfwRuntimeException("loadByMainIndex : parent_object_pk is mandatory field");
+          if (!$object_category_enm) throw new AfwRuntimeException("loadByMainIndex : object_category_enm is mandatory field");
+          if (!$object_type_id) throw new AfwRuntimeException("loadByMainIndex : object_type_id is mandatory field");
+          if (!$object_code) throw new AfwRuntimeException("loadByMainIndex : object_code is mandatory field");
 
 
           $obj->select("parent_object_pk", $parent_object_pk);
