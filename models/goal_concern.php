@@ -285,7 +285,7 @@ class GoalConcern extends AFWObject
         return array($category_id, $type_id, $code, $name_ar, $name_en, $specification, $childs);
     }
 
-    public function list_of_operation_men()
+    public static function list_of_operation_men()
     {
         $list_of_items = array();
         $list_of_items[1] = "إنشاء / تعديل";  //     code : EDIT  / UPDATE

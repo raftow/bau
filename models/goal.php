@@ -852,15 +852,18 @@ class Goal extends AFWObject
 
                 $atList = $this->get('atable_mfk');
                 /** @var Atable $atableItem */
-                foreach ($atList as $atableItem) {
-                        $atable_name = $atableItem->getVal('atable_name');
-                        // $hierarchy_level_enum = $hlSettings[$atable_name];
-                        // if (!$hierarchy_level_enum) $hierarchy_level_enum = 999;
-                        list($err, $inf) = $atableItem->genereUserBFs($lang, $hlSettings);
-                        if ($err)
-                                $error .= "for table $atable_name : genereUserBFs returned this error : $err \n<br>\n";
-                        if ($inf)
-                                $info .= "for table $atable_name :  genereUserBFs returned This info : $inf \n<br>\n";
+                foreach ($atList as $atable_id => $atableItem) {
+                        if ($atableItem) // may be have been deleted (it happened)
+                        {
+                                $atable_name = $atableItem->getVal('atable_name');
+                                // $hierarchy_level_enum = $hlSettings[$atable_name];
+                                // if (!$hierarchy_level_enum) $hierarchy_level_enum = 999;
+                                list($err, $inf) = $atableItem->genereUserBFs($lang, $hlSettings);
+                                if ($err)
+                                        $error .= "for table $atable_name : genereUserBFs returned this error : $err \n<br>\n";
+                                if ($inf)
+                                        $info .= "for table $atable_name :  genereUserBFs returned This info : $inf \n<br>\n";
+                        } else $error .= " table $atable_id not found ";
                 }
                 UfwQueryAnalyzer::stopProcessLourdMode();
                 return array($error, $info);
